@@ -5,14 +5,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
 
 import cn.timeoff.domain.User;
 import cn.timeoff.repository.UserRepository;
 
 @ComponentScan
 @EnableAutoConfiguration
-@Import(RepositoryRestMvcConfiguration.class)
 public class Application {
 
     public static void main(String[] args) {
