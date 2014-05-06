@@ -1,4 +1,4 @@
-package cn.timeoff.domain;
+package cn.timeoff.model;
 
 
 import javax.persistence.Entity;

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
-import cn.timeoff.domain.User;
+import cn.timeoff.model.User;
 
 public interface UserRepository extends CrudRepository<User, Long>{
 
