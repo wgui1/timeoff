@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import cn.timeoff.model.User;
@@ -12,6 +13,7 @@ import cn.timeoff.repository.UserRepository;
 
 @ComponentScan
 @EnableAutoConfiguration
+@EnableWebMvc
 public class Application {
 
     public static void main(String[] args) {

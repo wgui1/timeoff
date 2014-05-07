@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cn.timeoff.repository.UserRepository;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/users")
 public class UserController {
 	
 	@Autowired
 	private UserRepository user_repository;
 	
-	@RequestMapping("users")
+	@RequestMapping("")
 	public String findAll() {
-		return "hello.html";
+		return "hello";
 	}
 }
