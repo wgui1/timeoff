@@ -3,16 +3,15 @@ package cn.timeoff.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.timeoff.repository.UserRepository;
+import cn.timeoff.repository.EmployeeRepository;
 
 @Controller
-@RequestMapping("/users")
-public class UserController {
+@RequestMapping("/employees")
+public class EmployeeController {
 	
 	@Autowired
-	private UserRepository user_repository;
+	private EmployeeRepository employee_repository;
 	
 	@RequestMapping("")
 	public String findAll() {
