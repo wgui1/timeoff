@@ -5,14 +5,20 @@
     <title>Timeoff Management System</title>
   </head>
   <body>
-    <header>
-      <h1>Timeoff Management System</h1>
-    </header>
-    <section layout:fragment="content">
-      <p>Page content goes here</p>
-    </section>
-    <footer>
-      <p layout:fragment="custom-footer"></p>
-    </footer>  
+    <div th:replace="fragments/header :: header">
+    </div>
+    <div class="container">
+      <div layout:fragment="content">
+        <h1>Static content for prototyping purposes only</h1>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          Praesent scelerisque neque neque, ac elementum quam dignissim interdum.
+          Phasellus et placerat elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          Praesent scelerisque neque neque, ac elementum quam dignissim interdum.
+          Phasellus et placerat elit.
+        </p>
+      </div>
+      <div th:replace="fragments/footer :: footer">© 2014 The Static Templates</div>
+    </div>
   </body>
 </html>
