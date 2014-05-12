@@ -1,9 +1,15 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
-<head>
-<title>User Information</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-</head>
-<body>
-</body>
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layout">
+  <head>
+    <title>Employee Information</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+    <ol>
+        <li th:text="|${employee.firstName} ${employee.lastName}|">name</li>
+    </ol>
+    </div>
+  </body>
 </html>
