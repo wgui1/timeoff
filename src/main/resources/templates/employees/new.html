@@ -7,9 +7,9 @@
   </head>
   <body>
     <div layout:fragment="content">
-    <ol>
-        <li th:text="|${employee.firstName} ${employee.lastName}|">name</li>
-    </ol>
+    <div th:replace="employees/form::form">
+    <span>new employee</span>
+    </div>
     </div>
   </body>
 </html>

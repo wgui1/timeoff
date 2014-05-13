@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layout">
+  <head>
+    <title>Employee Information</title>
+  </head>
+  <body>
+    <div th:fragment="form">
+    <form action="#" th:action="@{/employees}" th:object="${employee}" method="post">
+    <input type="text" th:field="*{firstName}"/>
+    <input type="text" th:field="*{lastName}"/>
+    <button name="new" type="submit" value="1">submit</button>
+    </form>
+    </div>
+  </body>
+</html>
