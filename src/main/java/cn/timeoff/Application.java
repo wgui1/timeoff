@@ -22,5 +22,6 @@ public class Application {
 
         // save a couple of customers
         repository.save(new Employee("Jack", "Bauer"));
+        repository.save(new Employee("Jack", "Tom"));
     }
 }
