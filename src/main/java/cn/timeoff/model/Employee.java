@@ -20,8 +20,16 @@ public class Employee {
     private String lastName;
     
     @ManyToOne
-    @JoinColumn(name="company_id")
-    private Company company;
+    @JoinColumn(name="cooperation_id")
+    private Cooperation cooperation;
+
+    @ManyToOne
+    @JoinColumn(name="organization_id")
+    private Organization organization;
+
+    @ManyToOne
+    @JoinColumn(name="site_id")
+    private Site site;
 
     public Employee(String firstName, String lastName) {
         this.firstName = firstName;
