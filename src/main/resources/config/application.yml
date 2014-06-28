@@ -3,12 +3,6 @@ spring:
 server:
     port: 8082
 debug: true
-management:
-    port: 8089
-    address: 127.0.0.1
-spring:
-    jmx:
-        enabled: true
 ---
 
 spring:
