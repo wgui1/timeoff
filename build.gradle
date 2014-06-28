@@ -33,6 +33,8 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile 'org.springframework.security:spring-security-web:3.2.4.RELEASE'
+    compile 'org.springframework.security:spring-security-config:3.2.4.RELEASE'
     compile("org.yaml:snakeyaml")
     compile("com.h2database:h2")
     testCompile("org.springframework.boot:spring-boot-starter-test")
