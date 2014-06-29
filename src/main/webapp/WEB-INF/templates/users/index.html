@@ -7,9 +7,16 @@
   </head>
   <body>
     <div layout:fragment="content">
-    <div th:replace="employees/form::form">
-    <span>new employee</span>
-    </div>
+    <table>
+    <tr>
+    <th>FirstName</th>
+    <th>LastName</th>
+    </tr>
+    <tr th:each="user: ${users}">
+        <td th:text="${user.username}">Jack</td>
+        <td th:text="${user.email}">Baure</td>
+    </tr>
+    </table>
     </div>
   </body>
 </html>

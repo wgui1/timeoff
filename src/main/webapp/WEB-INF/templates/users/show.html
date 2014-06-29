@@ -7,16 +7,9 @@
   </head>
   <body>
     <div layout:fragment="content">
-    <table>
-    <tr>
-    <th>FirstName</th>
-    <th>LastName</th>
-    </tr>
-    <tr th:each="employee: ${employees}">
-        <td th:text="${employee.firstName}">Jack</td>
-        <td th:text="${employee.lastName}">Baure</td>
-    </tr>
-    </table>
+    <ol>
+        <li th:text="|${user.username} ${user.email}|">name</li>
+    </ol>
     </div>
   </body>
 </html>

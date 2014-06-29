@@ -7,8 +7,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import cn.timeoff.model.Employee;
-import cn.timeoff.repository.EmployeeRepository;
+import cn.timeoff.model.User;
+import cn.timeoff.repository.UserRepository;
 
 @ComponentScan
 @EnableAutoConfiguration
@@ -17,10 +17,14 @@ public class Application {
 
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(Application.class);
-        EmployeeRepository repository = context.getBean(EmployeeRepository.class);
+        UserRepository repository = context.getBean(UserRepository.class);
 
         // save a couple of customers
-        repository.save(new Employee("Jack", "Bauer"));
-        repository.save(new Employee("Jack", "Tom"));
+        User jack = new User("Jack", "jack@24.com");
+        jack.setPassword("jack");
+        repository.save(jack);
+        User amanda = new User("Amanda", "amanda@24.com");
+        amanda.setPassword("amanda");
+        repository.save(amanda);
     }
 }

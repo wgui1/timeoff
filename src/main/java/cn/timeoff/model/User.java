@@ -37,7 +37,12 @@ public class User {
     public User() {
 	}
 
-    public Cooperation getCooperation() {
+    public User(String username, String email) {
+		this.username = username;
+		this.email = email;
+	}
+
+	public Cooperation getCooperation() {
 		return cooperation;
 	}
 

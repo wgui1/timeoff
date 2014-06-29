@@ -21,17 +21,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
             .jdbcAuthentication()
-                .dataSource(dataSource)
-                .withDefaultSchema()
-                .withUser("user").password("password").roles("USER");
+            .dataSource(dataSource);
+        auth
+        	.inMemoryAuthentication()
+            .withUser("user").password("password").roles("USER");
     }
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .anyRequest().authenticated()
-                .and()
+            .anyRequest().anonymous()
+            .and()
             .formLogin()
-                .and()
+            .and()
             .httpBasic();
     }
 }
