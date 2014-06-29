@@ -1,5 +1,6 @@
 package cn.timeoff.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,28 +9,35 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Organization {
-
+public class Group {
+	
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
 
-    private String name;
-
-	@ManyToOne
+    @ManyToOne
     @JoinColumn(name="cooperation_id")
     private Cooperation cooperation;
 
-	public Organization() {
-		super();
+    @Column
+    private String groupName;
+
+    public Group() {
 	}
 
-	public String getName() {
-		return name;
+	public Cooperation getCooperation() {
+		return cooperation;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setCooperation(Cooperation cooperation) {
+		this.cooperation = cooperation;
 	}
 
+	public String getGroupName() {
+		return groupName;
+	}
+
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
 }

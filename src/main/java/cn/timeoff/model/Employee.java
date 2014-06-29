@@ -1,6 +1,5 @@
 package cn.timeoff.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,7 +12,6 @@ public class Employee {
 	
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    @Column(name="employee_id")
     private long id;
 
     private String firstName;
