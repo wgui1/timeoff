@@ -1,5 +1,7 @@
 package cn.timeoff.model;
 
+import java.sql.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,7 +21,7 @@ public class User {
     @JoinColumn(name="cooperation_id")
     private Cooperation cooperation;
 
-    @Column(nullable=false, length=128)
+	@Column(nullable=false, length=128)
     private String username;
 
 	@Column(nullable=false, length=512, unique=true)
@@ -34,12 +36,24 @@ public class User {
     @Column
     private String lastName;
     
+    @Column
+    private Date onboardDate;
+    
+    @ManyToOne
+    @JoinColumn(name="manager_id")
+    private User manager;
+
     public User() {
 	}
 
-    public User(String username, String email) {
+    public User(String username, String email, String password) {
 		this.username = username;
 		this.email = email;
+		this.password = password;
+	}
+
+    public long getId() {
+		return id;
 	}
 
 	public Cooperation getCooperation() {
