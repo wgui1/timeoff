@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layout">
+  <head>
+    <title>User Information</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+    <div th:replace="users/form::form">
+    <span>new user</span>
+    </div>
+    </div>
+  </body>
+</html>

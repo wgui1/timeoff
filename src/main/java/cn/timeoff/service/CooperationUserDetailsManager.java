@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.GroupManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 
-public class TimeoffUserDetail implements UserDetailsManager, GroupManager {
+public class CooperationUserDetailsManager implements UserDetailsManager, GroupManager {
 
 	@Override
 	public UserDetails loadUserByUsername(String username)

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layout">
+  <head>
+    <title>Employee Information</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+    <ol>
+        <li th:text="|${user.firstName} ${user.lastName}|">name</li>
+    </ol>
+    </div>
+  </body>
+</html>

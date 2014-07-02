@@ -8,3 +8,4 @@ bin
 .settings
 .metadata/
 /WEB-INF
+test-output
