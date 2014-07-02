@@ -2,21 +2,23 @@ package cn.timeoff.service;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.GroupManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 
-public class CooperationUserDetailsManager implements UserDetailsManager, GroupManager {
+import cn.timeoff.model.User;
+import cn.timeoff.repository.UserRepository;
 
-	@Override
-	public UserDetails loadUserByUsername(String username)
-			throws UsernameNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+public class CooperationUserDetailsManager extends CooperationUserDetailsService implements UserDetailsManager, GroupManager {
+	
 	@Override
 	public void createUser(UserDetails user) {
 		// TODO Auto-generated method stub
