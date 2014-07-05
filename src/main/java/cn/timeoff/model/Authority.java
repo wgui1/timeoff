@@ -23,7 +23,30 @@ public class Authority {
     @ManyToOne
     @JoinColumn(name="user_id")
     private User user;
-
+    
 	@Column(length=50, nullable=false)
     private String authority;
+
+    public Authority() {
+    }
+
+    public Authority(String authority) {
+    	this.authority = authority;
+    }
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public String getAuthority() {
+		return authority;
+	}
+
+	public void setAuthority(String authority) {
+		this.authority = authority;
+	}
 }
