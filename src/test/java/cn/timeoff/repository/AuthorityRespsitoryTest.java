@@ -9,10 +9,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import cn.timeoff.model.Authority;
-import cn.timeoff.model.User;
-import cn.timeoff.repository.AuthorityRepository;
-import cn.timeoff.repository.UserRepository;
+import cn.timeoff.security.model.Authority;
+import cn.timeoff.security.model.User;
+import cn.timeoff.security.repository.AuthorityRepository;
+import cn.timeoff.security.repository.UserRepository;
 
 
 @SpringApplicationConfiguration(classes = {cn.timeoff.Application.class})

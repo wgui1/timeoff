@@ -7,8 +7,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import cn.timeoff.model.User;
-import cn.timeoff.repository.UserRepository;
+import cn.timeoff.security.model.User;
+import cn.timeoff.security.repository.UserRepository;
 
 @ComponentScan
 @EnableAutoConfiguration

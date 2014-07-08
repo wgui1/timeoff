@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import cn.timeoff.model.User;
-import cn.timeoff.repository.UserRepository;
+import cn.timeoff.security.model.User;
+import cn.timeoff.security.repository.UserRepository;
 
 @Controller
 @RequestMapping("/users")

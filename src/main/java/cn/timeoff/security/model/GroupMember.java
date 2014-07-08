@@ -1,6 +1,5 @@
-package cn.timeoff.model;
+package cn.timeoff.security.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,8 +7,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import cn.timeoff.model.Group;
+
 @Entity
-public class GroupAuthority {
+public class GroupMember {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
@@ -18,10 +19,11 @@ public class GroupAuthority {
     @JoinColumn(name="group_id")
     private Group group;
 
-	@Column(length=50, nullable=false)
-    private String authority;
+	@ManyToOne
+    @JoinColumn(name="user_id")
+    private User user;
 
-    public GroupAuthority() {
+    public GroupMember() {
 	}
 
     public Group getGroup() {
@@ -32,11 +34,12 @@ public class GroupAuthority {
 		this.group = group;
 	}
 
-	public String getAuthority() {
-		return authority;
+	public User getUser() {
+		return user;
 	}
 
-	public void setAuthority(String authority) {
-		this.authority = authority;
+	public void setUser(User user) {
+		this.user = user;
 	}
+
 }

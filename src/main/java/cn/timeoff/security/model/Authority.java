@@ -1,4 +1,4 @@
-package cn.timeoff.model;
+package cn.timeoff.security.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

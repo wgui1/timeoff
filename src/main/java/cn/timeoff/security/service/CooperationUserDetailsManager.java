@@ -1,4 +1,4 @@
-package cn.timeoff.service;
+package cn.timeoff.security.service;
 
 import java.util.List;
 
@@ -14,8 +14,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.GroupManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 
-import cn.timeoff.model.User;
-import cn.timeoff.repository.UserRepository;
+import cn.timeoff.security.model.User;
+import cn.timeoff.security.repository.UserRepository;
 
 public class CooperationUserDetailsManager extends CooperationUserDetailsService implements UserDetailsManager, GroupManager {
 	

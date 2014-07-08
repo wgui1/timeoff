@@ -1,9 +1,9 @@
-package cn.timeoff.service;
+package cn.timeoff.security.service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -19,10 +19,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import cn.timeoff.model.Authority;
-import cn.timeoff.model.User;
-import cn.timeoff.repository.AuthorityRepository;
-import cn.timeoff.repository.UserRepository;
+import cn.timeoff.security.core.CooperationUserDetails;
+import cn.timeoff.security.core.CooperationUserDetailsImpl;
+import cn.timeoff.security.model.Authority;
+import cn.timeoff.security.model.User;
+import cn.timeoff.security.repository.AuthorityRepository;
+import cn.timeoff.security.repository.UserRepository;
 
 public class CooperationUserDetailsService implements UserDetailsService, MessageSourceAware {
 
@@ -31,7 +33,7 @@ public class CooperationUserDetailsService implements UserDetailsService, Messag
 
     private String rolePrefix = "";
     private boolean enableAuthorities = true;
-    private boolean enableGroups;
+    private boolean enableGroups = true;
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -56,27 +58,36 @@ public class CooperationUserDetailsService implements UserDetailsService, Messag
 		
 		User user = users.get(0);
 		
-		Set<GrantedAuthority> dbAuthsSet = new HashSet<GrantedAuthority>();
+		List<GrantedAuthority> dbAuths = new ArrayList<GrantedAuthority>();
 		if (enableAuthorities) {
-			dbAuthsSet.addAll(loadUserAuthorities(user));
+			dbAuths.addAll(loadUserAuthorities(user));
 		}
-
-        return createUserDetails(username, user, dbAuthsSet);
-	}
-	
-	private UserDetails createUserDetails(String username, User user,
-			Set<GrantedAuthority> dbAuthsSet) {
-		// TODO Auto-generated method stub
-		return null;
+		if (enableGroups) {
+			dbAuths.addAll(loadGroupAuthorities(user));
+		}
+        return createUserDetails(user, dbAuths);
 	}
 
-	protected List<GrantedAuthority> loadUserAuthorities(User user) {
+
+	protected CooperationUserDetails createUserDetails(User user,
+                                List<GrantedAuthority> combinedAuthorities) {
+        return new CooperationUserDetailsImpl(user.getUsername(),
+        		user.getCooperation().getName(),
+        		user.getPassword(), 
+        		user.getEnabled(),
+                true, true, true, combinedAuthorities);
+    }
+
+	protected Collection<? extends GrantedAuthority> loadUserAuthorities(User user) {
 		List<Authority> authorities = authorityRepository.findAllByUser(user);
-		List<GrantedAuthority> authsSet = new ArrayList<GrantedAuthority>();
-		for(Authority auth: authorities) {
-			authsSet.add(new SimpleGrantedAuthority(auth.getAuthority()));
-		}
-		return authsSet;
+		return authorities.stream()
+						  .map(p -> new SimpleGrantedAuthority(p.getAuthority()))
+						  .collect(Collectors.toList());
+	}
+
+    protected Collection<? extends GrantedAuthority> loadGroupAuthorities(
+			User user) {
+    	return null;
 	}
 
 	@Override

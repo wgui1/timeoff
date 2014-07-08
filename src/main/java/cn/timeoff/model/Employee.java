@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import cn.timeoff.security.model.User;
+
 @Entity
 public class Employee {
 	

@@ -1,4 +1,4 @@
-package cn.timeoff.model;
+package cn.timeoff.security.model;
 
 import java.sql.Date;
 
@@ -31,6 +31,9 @@ public class User {
     private String password;
 
     @Column
+    private Boolean enabled;
+
+	@Column
     private String firstName;
 
     @Column
@@ -54,6 +57,14 @@ public class User {
 
     public long getId() {
 		return id;
+	}
+
+    public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
 	}
 
 	public Cooperation getCooperation() {
