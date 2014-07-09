@@ -41,6 +41,4 @@ public class UserRepositoryTest {
         amanda.setPassword("amanda");
         userRepository.save(amanda);
 	}
-
-
 }

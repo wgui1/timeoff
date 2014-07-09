@@ -10,7 +10,8 @@ import cn.timeoff.security.model.User;
 
 public interface GroupAuthorityRepository extends CrudRepository<GroupAuthority, Long> {
 	
-	@Query("from GroupAuthority g where g.user = user and g.cooperation=user.cooperation and g.group")
-	public List<GroupAuthority> findGroupAuthorityByUser(User user);
+	//@Query( "select ga from GroupAuthority ga, Group g, GroupMember gm, User u where g.cooperation = u.cooperation and gm.group = g and gm.user = u and ga.group = g and u = :user")
+	//@Query("select ga from GroupAuthority ga join ga.group ")
+	public List<GroupAuthority> findByUser(User user);
 
 }

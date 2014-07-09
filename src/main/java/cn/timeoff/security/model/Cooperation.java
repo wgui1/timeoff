@@ -15,7 +15,6 @@ public class Cooperation{
     private String name;
 
 	public Cooperation() {
-		super();
 	}
 
 	public String getName() {

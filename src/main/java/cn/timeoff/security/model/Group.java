@@ -1,4 +1,4 @@
-package cn.timeoff.model;
+package cn.timeoff.security.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,8 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
-import cn.timeoff.security.model.Cooperation;
 
 @Entity
 public class Group {

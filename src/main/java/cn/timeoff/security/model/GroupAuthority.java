@@ -8,8 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import cn.timeoff.model.Group;
-
 @Entity
 public class GroupAuthority {
     @Id
