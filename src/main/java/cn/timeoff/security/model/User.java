@@ -30,8 +30,8 @@ public class User {
     @Column(nullable=false, length=512)
     private String password;
 
-    @Column
-    private Boolean enabled;
+    @Column()
+    private Boolean enabled = true;
 
 	@Column
     private String firstName;

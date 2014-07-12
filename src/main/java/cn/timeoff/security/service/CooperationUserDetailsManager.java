@@ -21,6 +21,7 @@ public class CooperationUserDetailsManager extends CooperationUserDetailsService
 	
 	@Override
 	public void createUser(UserDetails user) {
+		//User db_user = user;
 		// TODO Auto-generated method stub
 
 	}
