@@ -24,6 +24,10 @@ public class GroupMember {
     public GroupMember() {
 	}
 
+    public long getId() {
+		return id;
+	}
+
     public Group getGroup() {
 		return group;
 	}

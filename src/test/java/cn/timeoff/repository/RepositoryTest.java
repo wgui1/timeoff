@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import cn.timeoff.security.model.Authority;
 import cn.timeoff.security.model.Cooperation;
 import cn.timeoff.security.model.Group;
 import cn.timeoff.security.model.GroupAuthority;
@@ -27,7 +28,7 @@ import cn.timeoff.security.repository.UserRepository;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ActiveProfiles("dev")
-public class GroupAuthorityRepositoryTest {
+public class RepositoryTest {
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -42,18 +43,47 @@ public class GroupAuthorityRepositoryTest {
 	private GroupRepository groupRepository;
 	
 	@Autowired
+	private AuthorityRepository authorityRepository;
+
+	@Autowired
 	private CooperationRepository cooperationRepository;
 
 	@Before
 	public void cleanDB() {
-		userRepository.deleteAll();
 		groupAuthorityRepository.deleteAll();
 		groupMemberRepository.deleteAll();
 		groupRepository.deleteAll();
+		authorityRepository.deleteAll();
+		userRepository.deleteAll();
 	}
 
 	@Test
-	public void basic() {
+	public void basicUser() {
+        // save a couple of customers
+        User jack = new User("Jack", "jack@24.com", "");
+        jack.setPassword("jack");
+        userRepository.save(jack);
+        User amanda = new User("Amanda", "amanda@24.com", "");
+        amanda.setPassword("amanda");
+        userRepository.save(amanda);
+	}
+
+	@Test
+	public void basicAuthority() {
+        // save a couple of customers
+        User jack = new User("Jack", "jack@24.com", "");
+        jack.setPassword("jack");
+        userRepository.save(jack);
+        
+        Authority authority = new Authority("USER");
+        authority.setUser(jack);
+        authorityRepository.save(authority);
+        
+        assert jack == userRepository.findByUsername("Jack").get(0);
+	}
+
+	@Test
+	public void basicGroupAuthority() {
 		
 		Cooperation co = new Cooperation();
 		co.setName("Timeoff");
@@ -77,39 +107,12 @@ public class GroupAuthorityRepositoryTest {
         GroupAuthority group_authority = new GroupAuthority();
         group_authority.setAuthority("USER");
         group_authority.setGroup(user_group);
+        groupAuthorityRepository.save(group_authority);
         
         List<GroupAuthority> authorities = groupAuthorityRepository.findByUser(jack);
         org.junit.Assert.assertFalse(authorities.isEmpty());
-        org.junit.Assert.assertEquals(authorities.get(0), group_authority);
+        org.junit.Assert.assertEquals(authorities.get(0).getId(), group_authority.getId());
 
 	}
 
-	public void basic2() {
-		
-		Cooperation co = new Cooperation();
-		co.setName("Timeoff");
-		cooperationRepository.save(co);
-		
-        User jack = new User("Jack", "jack@24.com", "");
-        jack.setPassword("jack");
-        jack.setCooperation(co);
-        userRepository.save(jack);
-
-        User amanda = new User("Amanda", "amanda@24.com", "");
-        amanda.setPassword("amanda");
-        amanda.setCooperation(co);
-        userRepository.save(amanda);
-
-        Group user_group = new Group();
-        user_group.setCooperation(co);
-        user_group.setGroupName("USER");
-        groupRepository.save(user_group);
-
-        Group admin_group = new Group();
-        admin_group.setCooperation(co);
-        admin_group.setGroupName("ADMIN");
-        groupRepository.save(admin_group);
-        
-
-	}
 }

@@ -20,7 +20,7 @@ public class Authority {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
 
-    @ManyToOne
+	@ManyToOne
     @JoinColumn(name="user_id")
     private User user;
     
@@ -29,6 +29,10 @@ public class Authority {
 
     public Authority() {
     }
+
+    public long getId() {
+		return id;
+	}
 
     public Authority(String authority) {
     	this.authority = authority;

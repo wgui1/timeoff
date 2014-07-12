@@ -24,6 +24,10 @@ public class GroupAuthority {
     public GroupAuthority() {
 	}
 
+    public long getId() {
+		return id;
+	}
+
     public Group getGroup() {
 		return group;
 	}

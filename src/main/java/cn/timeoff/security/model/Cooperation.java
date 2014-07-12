@@ -14,6 +14,10 @@ public class Cooperation{
 
     private String name;
 
+    public long getId() {
+		return id;
+	}
+
 	public Cooperation() {
 	}
 
