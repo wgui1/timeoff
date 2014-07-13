@@ -116,7 +116,7 @@ public class  SecurityTest{
 		org.junit.Assert.assertEquals("ROLE_USER", auths.get(1).getAuthority());
 	}
 
-	@Test
+	@Test(expected=UsernameNotFoundException.class)
 	public void createUser() {
 		Cooperation co = new Cooperation();
 		co.setName("Timeoff");

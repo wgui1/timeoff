@@ -10,8 +10,6 @@ import javax.transaction.Transactional;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.MessageSourceAware;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import cn.timeoff.security.core.CooperationNotFoundException;
+import cn.timeoff.security.core.CooperationSecurityMessageSource;
 import cn.timeoff.security.core.CooperationUserDetails;
 import cn.timeoff.security.core.CooperationUserDetailsImpl;
 import cn.timeoff.security.model.Authority;
@@ -31,7 +30,7 @@ import cn.timeoff.security.repository.CooperationRepository;
 import cn.timeoff.security.repository.GroupAuthorityRepository;
 import cn.timeoff.security.repository.UserRepository;
 
-public class CooperationUserDetailsService implements UserDetailsService, MessageSourceAware {
+public class CooperationUserDetailsService implements UserDetailsService {
 
 	
 	protected Log log = LogFactory.getLog(getClass());
@@ -50,7 +49,7 @@ public class CooperationUserDetailsService implements UserDetailsService, Messag
 
 	@Autowired CooperationRepository cooperationRepository; 
 
-	protected MessageSourceAccessor messages;
+    protected final MessageSourceAccessor messages = CooperationSecurityMessageSource.getAccessor();
 
 	@Override
 	@Transactional
@@ -123,12 +122,6 @@ public class CooperationUserDetailsService implements UserDetailsService, Messag
 		return authorities.stream()
                   .map(p -> new SimpleGrantedAuthority(rolePrefix + p.getAuthority()))
                   .collect(Collectors.toList());
-	}
-
-	@Override
-	public void setMessageSource(MessageSource messageSource) {
-		messages = new MessageSourceAccessor(messageSource);
-		
 	}
 
 	public String getRolePrefix() {

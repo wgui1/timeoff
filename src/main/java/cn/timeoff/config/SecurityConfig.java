@@ -1,7 +1,5 @@
 package cn.timeoff.config;
 
-import javax.annotation.Resource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +11,6 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import cn.timeoff.security.service.CooperationUserDetailsManager;
-import cn.timeoff.security.service.CooperationUserDetailsService;
 
 @Configuration
 @EnableWebMvcSecurity
@@ -27,6 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return userManager;
 	}
 
+	@Autowired
     private UserDetailsService userDetailsService;
 
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {

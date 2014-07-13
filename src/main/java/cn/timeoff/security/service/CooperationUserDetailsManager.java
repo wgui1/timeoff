@@ -8,7 +8,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.GroupManager;
@@ -39,6 +42,7 @@ public class CooperationUserDetailsManager extends CooperationUserDetailsService
 
 	@Override
 	public void updateUser(UserDetails user) {
+		//TODO: check if it is feasible to update password here
 		CooperationUserDetails coUser = (CooperationUserDetails) user;
 		User dbUser = findUser(coUser.getUsername());
 		dbUser.setEnabled(coUser.isEnabled());
@@ -54,14 +58,37 @@ public class CooperationUserDetailsManager extends CooperationUserDetailsService
 
 	@Override
 	public void deleteUser(String username) {
-//		User dbUser = findUser(username);
-//		userRepository.delete(dbUser);
 		userRepository.deleteByUsername(username);
 	}
 
 	@Override
 	public void changePassword(String oldPassword, String newPassword) {
-		// TODO Auto-generated method stub
+        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+
+        if (currentUser == null) {
+            // This would indicate bad coding somewhere
+            throw new AccessDeniedException("Can't change password as no Authentication object found in context " +
+                    "for current user.");
+        }
+
+        String username = currentUser.getName();
+
+        // If an authentication manager has been set, re-authenticate the user with the supplied password.
+//        if (authenticationManager != null) {
+//            logger.debug("Reauthenticating user '"+ username + "' for password change request.");
+//
+//            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, oldPassword));
+//        } else {
+//            logger.debug("No authentication manager set. Password won't be re-checked.");
+//        }
+//
+//        logger.debug("Changing password for user '"+ username + "'");
+//
+//        getJdbcTemplate().update(changePasswordSql, newPassword, username);
+//
+//        SecurityContextHolder.getContext().setAuthentication(createNewAuthentication(currentUser, newPassword));
+//
+//        userCache.removeUserFromCache(username);
 
 	}
 
