@@ -30,29 +30,18 @@ public class CooperationUserDetailsManager extends CooperationUserDetailsService
 	@Override
 	public void createUser(UserDetails user){
 		CooperationUserDetails coUser = (CooperationUserDetails) user;
-		
-		String cooperationName = coUser.getCooperation();
-		Cooperation cooperation = findCooperation(cooperationName);
-
 		User dbUser = new User(coUser.getUsername(), coUser.getEmail(), coUser.getPassword());
 		dbUser.setEnabled(user.isEnabled());
-		dbUser.setCooperation(cooperation);
 		userRepository.save(dbUser);
 	}
 
 	@Override
 	public void updateUser(UserDetails user) {
-		//TODO: check if it is feasible to update password here
 		CooperationUserDetails coUser = (CooperationUserDetails) user;
 		User dbUser = findUser(coUser.getUsername());
 		dbUser.setEnabled(coUser.isEnabled());
 		dbUser.setEmail(coUser.getEmail());
 
-		String cooperationName = coUser.getCooperation();
-		if (dbUser.getCooperation().getName() != cooperationName) {
-            Cooperation cooperation = findCooperation(cooperationName);
-			dbUser.setCooperation(cooperation);
-		}
 		userRepository.save(dbUser);
 	}
 

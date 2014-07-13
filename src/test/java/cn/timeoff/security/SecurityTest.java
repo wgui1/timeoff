@@ -19,12 +19,14 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import cn.timeoff.security.core.CooperationUserDetails;
 import cn.timeoff.security.core.CooperationUserDetailsImpl;
 import cn.timeoff.security.model.Cooperation;
+import cn.timeoff.security.model.Employee;
 import cn.timeoff.security.model.Group;
 import cn.timeoff.security.model.GroupAuthority;
 import cn.timeoff.security.model.GroupMember;
 import cn.timeoff.security.model.User;
 import cn.timeoff.security.repository.AuthorityRepository;
 import cn.timeoff.security.repository.CooperationRepository;
+import cn.timeoff.security.repository.EmployeeRepository;
 import cn.timeoff.security.repository.GroupAuthorityRepository;
 import cn.timeoff.security.repository.GroupMemberRepository;
 import cn.timeoff.security.repository.GroupRepository;
@@ -57,12 +59,16 @@ public class  SecurityTest{
 	@Autowired
 	private UserDetailsManager userDetailsManager;
 
+	@Autowired
+	private EmployeeRepository employeeRepository;
+
 	@Before
 	public void setUp() throws Exception {
 		groupAuthorityRepository.deleteAll();
 		groupMemberRepository.deleteAll();
 		groupRepository.deleteAll();
 		authorityRepository.deleteAll();
+		employeeRepository.deleteAll();
 		userRepository.deleteAll();
 		cooperationRepository.deleteAll();
 	}
@@ -75,8 +81,10 @@ public class  SecurityTest{
 		
         User jack = new User("Jack", "jack@24.hours", "");
         jack.setPassword("jack");
-        jack.setCooperation(co);
         jack = userRepository.save(jack);
+
+        Employee employee_jack = new Employee(jack, co);
+        employee_jack = employeeRepository.save(employee_jack);
 
         Group user_group = new Group();
         user_group.setCooperation(co);
@@ -100,12 +108,12 @@ public class  SecurityTest{
 
         GroupMember user_member = new GroupMember();
         user_member.setGroup(user_group);
-        user_member.setUser(jack);
+        user_member.setEmployee(employee_jack);
         user_member = groupMemberRepository.save(user_member);
 
         GroupMember admin_member = new GroupMember();
         admin_member.setGroup(admin_group);
-        admin_member.setUser(jack);
+        admin_member.setEmployee(employee_jack);
         admin_member = groupMemberRepository.save(admin_member);
         
 		UserDetails jack_details = userDetailsManager.loadUserByUsername("Jack");
@@ -123,7 +131,7 @@ public class  SecurityTest{
 		co = cooperationRepository.save(co);
 
 		CooperationUserDetails user = new CooperationUserDetailsImpl(
-				"Jack", "Timeoff", "1234", "jack@24.hours", true, true, true, true,
+				"Jack", "1234", "jack@24.hours", true, true, true, true,
 				new ArrayList<GrantedAuthority>());
 		userDetailsManager.createUser(user);
 		UserDetails jack_details = userDetailsManager.loadUserByUsername("Jack");
@@ -137,7 +145,7 @@ public class  SecurityTest{
 		co = cooperationRepository.save(co);
 
 		CooperationUserDetails user = new CooperationUserDetailsImpl(
-				"Jack", "Timeoff", "1234", "jack@24.hours", true, true, true, true,
+				"Jack", "1234", "jack@24.hours", true, true, true, true,
 				new ArrayList<GrantedAuthority>());
 		userDetailsManager.createUser(user);
 		userDetailsManager.deleteUser("Jack");

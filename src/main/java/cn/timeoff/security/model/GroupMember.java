@@ -18,8 +18,8 @@ public class GroupMember {
     private Group group;
 
 	@ManyToOne
-    @JoinColumn(name="user_id")
-    private User user;
+    @JoinColumn(name="employee_id")
+    private Employee employee;
 
     public GroupMember() {
 	}
@@ -36,12 +36,12 @@ public class GroupMember {
 		this.group = group;
 	}
 
-	public User getUser() {
-		return user;
+	public Employee getEmployee() {
+		return employee;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 
 }
