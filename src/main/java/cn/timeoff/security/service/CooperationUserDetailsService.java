@@ -19,22 +19,24 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import cn.timeoff.security.core.CooperationNotFoundException;
 import cn.timeoff.security.core.CooperationUserDetails;
 import cn.timeoff.security.core.CooperationUserDetailsImpl;
 import cn.timeoff.security.model.Authority;
+import cn.timeoff.security.model.Cooperation;
 import cn.timeoff.security.model.GroupAuthority;
 import cn.timeoff.security.model.User;
 import cn.timeoff.security.repository.AuthorityRepository;
+import cn.timeoff.security.repository.CooperationRepository;
 import cn.timeoff.security.repository.GroupAuthorityRepository;
 import cn.timeoff.security.repository.UserRepository;
 
 public class CooperationUserDetailsService implements UserDetailsService, MessageSourceAware {
 
 	
-	private Log log = LogFactory.getLog(getClass());
+	protected Log log = LogFactory.getLog(getClass());
 
     private String rolePrefix = "";
-    private boolean enableAuthorities = true;
     private boolean enableGroups = true;
 	
 	@Autowired
@@ -46,27 +48,17 @@ public class CooperationUserDetailsService implements UserDetailsService, Messag
 	@Autowired
 	private GroupAuthorityRepository groupAuthorityRepository;
 
-	private MessageSourceAccessor messages;
+	@Autowired CooperationRepository cooperationRepository; 
+
+	protected MessageSourceAccessor messages;
 
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
-		List<User> users = userRepository.findByUsername(username);
-		
-		if (users.isEmpty()) {
-			log.debug("No resuts found for user '" + username + "'");
-			throw new UsernameNotFoundException(
-                messages.getMessage("CooperationUserDetailsService.notFound",
-                                new Object[]{username}, "User {0} not found"));
-		}
-		
-		User user = users.get(0);
+		User user = findUser(username);
 		
 		List<GrantedAuthority> dbAuths = new ArrayList<GrantedAuthority>();
-		if (enableAuthorities) {
-			dbAuths.addAll(loadUserAuthorities(user));
-		}
 		if (enableGroups) {
 			dbAuths.addAll(loadGroupAuthorities(user));
 		}
@@ -80,10 +72,39 @@ public class CooperationUserDetailsService implements UserDetailsService, Messag
 	}
 
 
+	protected User findUser(String username) throws UsernameNotFoundException {
+		List<User> users = userRepository.findByUsername(username);
+		
+		if (users.isEmpty()) {
+			log.debug("No resuts found for user '" + username + "'");
+			throw new UsernameNotFoundException(
+                messages.getMessage("CooperationUserDetailsService.notFound",
+                                new Object[]{username}, "User {0} not found"));
+		}
+		
+		User user = users.get(0);
+		return user;
+	}
+
+	protected Cooperation findCooperation(String cooperationName)
+			throws CooperationNotFoundException {
+        List<Cooperation> cooperations = cooperationRepository.findByName(cooperationName);
+        if (cooperations.isEmpty()) {
+            log.debug("No resuts found for cooperation '" + cooperationName + "'");
+            throw new CooperationNotFoundException(
+                messages.getMessage("CooperationUserDetailsService.CooperationNotFound",
+                                new Object[]{cooperationName}, "Cooperation {0} not found"));
+            
+        }
+        Cooperation cooperation = cooperations.get(0);
+        return cooperation;
+    }
+
 	protected CooperationUserDetails createUserDetails(User user,
                                 List<GrantedAuthority> combinedAuthorities) {
         return new CooperationUserDetailsImpl(user.getUsername(),
         		user.getCooperation().getName(),
+        		user.getEmail(),
         		user.getPassword(), 
         		user.getEnabled(),
                 true, true, true, combinedAuthorities);
@@ -108,14 +129,6 @@ public class CooperationUserDetailsService implements UserDetailsService, Messag
 	public void setMessageSource(MessageSource messageSource) {
 		messages = new MessageSourceAccessor(messageSource);
 		
-	}
-
-	public boolean getEnableAuthorities() {
-		return enableAuthorities;
-	}
-
-	public void setEnableAuthorities(boolean enableAuthorities) {
-		this.enableAuthorities = enableAuthorities;
 	}
 
 	public String getRolePrefix() {

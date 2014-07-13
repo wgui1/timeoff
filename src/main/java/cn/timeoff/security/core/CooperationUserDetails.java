@@ -5,5 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public interface CooperationUserDetails extends UserDetails {
 	
 	public String getCooperation();
+	
+	public String getEmail();
 
 }

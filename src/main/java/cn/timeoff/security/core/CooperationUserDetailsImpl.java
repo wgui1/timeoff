@@ -18,7 +18,8 @@ public class CooperationUserDetailsImpl implements CooperationUserDetails,
 
 	private String password;
     private final String username;
-    private final String cooperation;
+    private String cooperation;
+    private String email;
     private final List<GrantedAuthority> authorities;
     private final boolean accountNonExpired;
     private final boolean accountNonLocked;
@@ -26,13 +27,14 @@ public class CooperationUserDetailsImpl implements CooperationUserDetails,
     private final boolean enabled;
 
     public CooperationUserDetailsImpl(String username, String cooperation, String password,
-    							  boolean enabled, boolean accountNonExpired,
+    							  String email, boolean enabled, boolean accountNonExpired,
     							  boolean credentialsNonExpired,
                                   boolean accountNonLocked,
                                   Collection<? extends GrantedAuthority> authorities) {
 
         this.username = username;
         this.cooperation = cooperation;
+        this.email = email;
         this.password = password;
         this.enabled = enabled;
         this.accountNonExpired = accountNonExpired;
@@ -86,8 +88,17 @@ public class CooperationUserDetailsImpl implements CooperationUserDetails,
 	public boolean isEnabled() {
 		return enabled;
 	}
+	
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    private static List<GrantedAuthority> sortAuthorities(Collection<? extends GrantedAuthority> authorities) {
+	@Override
+    public String getEmail() {
+		return email;
+	}
+
+	private static List<GrantedAuthority> sortAuthorities(Collection<? extends GrantedAuthority> authorities) {
         Assert.notNull(authorities, "Cannot pass a null GrantedAuthority collection");
         if (authorities.stream().anyMatch(g -> g.getAuthority() == null)) {
         		throw new IllegalArgumentException("GrantedAuthority list cannot contain any null elements");

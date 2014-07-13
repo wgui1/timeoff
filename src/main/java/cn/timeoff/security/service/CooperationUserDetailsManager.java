@@ -14,28 +14,49 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.GroupManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 
+import cn.timeoff.security.core.CooperationUserDetails;
+import cn.timeoff.security.model.Cooperation;
 import cn.timeoff.security.model.User;
 import cn.timeoff.security.repository.UserRepository;
 
+@Transactional
 public class CooperationUserDetailsManager extends CooperationUserDetailsService implements UserDetailsManager, GroupManager {
 	
-	@Override
-	public void createUser(UserDetails user) {
-		//User db_user = user;
-		// TODO Auto-generated method stub
+	@Autowired UserRepository userRepository; 
 
+	@Override
+	public void createUser(UserDetails user){
+		CooperationUserDetails coUser = (CooperationUserDetails) user;
+		
+		String cooperationName = coUser.getCooperation();
+		Cooperation cooperation = findCooperation(cooperationName);
+
+		User dbUser = new User(coUser.getUsername(), coUser.getEmail(), coUser.getPassword());
+		dbUser.setEnabled(user.isEnabled());
+		dbUser.setCooperation(cooperation);
+		userRepository.save(dbUser);
 	}
 
 	@Override
 	public void updateUser(UserDetails user) {
-		// TODO Auto-generated method stub
+		CooperationUserDetails coUser = (CooperationUserDetails) user;
+		User dbUser = findUser(coUser.getUsername());
+		dbUser.setEnabled(coUser.isEnabled());
+		dbUser.setEmail(coUser.getEmail());
 
+		String cooperationName = coUser.getCooperation();
+		if (dbUser.getCooperation().getName() != cooperationName) {
+            Cooperation cooperation = findCooperation(cooperationName);
+			dbUser.setCooperation(cooperation);
+		}
+		userRepository.save(dbUser);
 	}
 
 	@Override
 	public void deleteUser(String username) {
-		// TODO Auto-generated method stub
-
+//		User dbUser = findUser(username);
+//		userRepository.delete(dbUser);
+		userRepository.deleteByUsername(username);
 	}
 
 	@Override

@@ -93,22 +93,22 @@ public class RepositoryTest {
         User jack = new User("Jack", "jack@24.com", "");
         jack.setPassword("jack");
         jack.setCooperation(co);
-        userRepository.save(jack);
+        jack = userRepository.save(jack);
 
         Group user_group = new Group();
         user_group.setCooperation(co);
         user_group.setGroupName("USER");
-        groupRepository.save(user_group);
+        user_group = groupRepository.save(user_group);
         
         GroupMember group_member = new GroupMember();
         group_member.setGroup(user_group);
         group_member.setUser(jack);
-        groupMemberRepository.save(group_member);
+        group_member = groupMemberRepository.save(group_member);
         
         GroupAuthority group_authority = new GroupAuthority();
         group_authority.setAuthority("USER");
         group_authority.setGroup(user_group);
-        groupAuthorityRepository.save(group_authority);
+        group_authority = groupAuthorityRepository.save(group_authority);
         
         List<GroupAuthority> authorities = groupAuthorityRepository.findByUser(jack);
         org.junit.Assert.assertFalse(authorities.isEmpty());
