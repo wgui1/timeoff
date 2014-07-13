@@ -11,4 +11,6 @@ public interface AuthorityRepository extends CrudRepository<Authority, Long> {
 	
 	public List<Authority> findAllByUser(User user);
 
+	public void deleteByUser(User user);
+
 }

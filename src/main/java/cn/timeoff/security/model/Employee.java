@@ -1,6 +1,5 @@
 package cn.timeoff.security.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,27 +7,43 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name="groups")
-public class Group {
+@Table(name = "employee",
+       uniqueConstraints = {
+         @UniqueConstraint(columnNames = {"user_id", "cooperation_id"} )
+} )
+public class Employee {
 	
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
 
     @ManyToOne
+    @JoinColumn(name="user_id")
+    private User user;
+
+    @ManyToOne
     @JoinColumn(name="cooperation_id")
     private Cooperation cooperation;
 
-    @Column(length=100, nullable=false)
-    private String groupName;
-
-    public Group() {
+	public Employee(User user, Cooperation cooperation) {
+		super();
+		this.user = user;
+		this.cooperation = cooperation;
 	}
 
-    public long getId() {
-		return id;
+	public Employee() {
+		super();
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public Cooperation getCooperation() {
@@ -39,11 +54,4 @@ public class Group {
 		this.cooperation = cooperation;
 	}
 
-	public String getGroupName() {
-		return groupName;
-	}
-
-	public void setGroupName(String groupName) {
-		this.groupName = groupName;
-	}
 }

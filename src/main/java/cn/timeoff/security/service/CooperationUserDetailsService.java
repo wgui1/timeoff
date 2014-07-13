@@ -23,6 +23,7 @@ import cn.timeoff.security.core.CooperationUserDetails;
 import cn.timeoff.security.core.CooperationUserDetailsImpl;
 import cn.timeoff.security.model.Authority;
 import cn.timeoff.security.model.Cooperation;
+import cn.timeoff.security.model.Employee;
 import cn.timeoff.security.model.GroupAuthority;
 import cn.timeoff.security.model.User;
 import cn.timeoff.security.repository.AuthorityRepository;
@@ -30,12 +31,14 @@ import cn.timeoff.security.repository.CooperationRepository;
 import cn.timeoff.security.repository.GroupAuthorityRepository;
 import cn.timeoff.security.repository.UserRepository;
 
+@Transactional
 public class CooperationUserDetailsService implements UserDetailsService {
 
 	
-	protected Log log = LogFactory.getLog(getClass());
+    protected final Log logger = LogFactory.getLog(getClass());
 
     private String rolePrefix = "";
+    private boolean enableAuthorities = true;
     private boolean enableGroups = true;
 	
 	@Autowired
@@ -47,27 +50,38 @@ public class CooperationUserDetailsService implements UserDetailsService {
 	@Autowired
 	private GroupAuthorityRepository groupAuthorityRepository;
 
-	@Autowired CooperationRepository cooperationRepository; 
+	@Autowired
+	private CooperationRepository cooperationRepository; 
 
     protected final MessageSourceAccessor messages = CooperationSecurityMessageSource.getAccessor();
 
 	@Override
-	@Transactional
-	public UserDetails loadUserByUsername(String username)
-			throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		//todo: seek solution to populate cooperation in UserDetails
 		User user = findUser(username);
+		Employee employee = null;
+		List<Employee> employees = user.getEmployees();
+		
+		if (user.getEmployees().size() == 1) {
+			employee = employees.get(0);
+		}
 		
 		List<GrantedAuthority> dbAuths = new ArrayList<GrantedAuthority>();
-		if (enableGroups) {
-			dbAuths.addAll(loadGroupAuthorities(user));
+		if (enableAuthorities) {
+			dbAuths.addAll(loadUserAuthorities(user));
+		}
+		if (enableGroups && employee != null) {
+			dbAuths.addAll(loadGroupAuthorities(employee));
 		}
 		if (dbAuths.isEmpty()) {
-			log.debug("User '" + username + "' has no authorities, take as 'not found'");
+			logger.debug("User '" + username + "' has no authorities, take as 'not found'");
 			throw new UsernameNotFoundException(
                 messages.getMessage("CooperationUserDetailsService.notFound",
                             new Object[]{username}, "User {0} has no GrantedAuthority"));
 		}
-        return createUserDetails(user, dbAuths);
+        CooperationUserDetails userDetails = createUserDetails(user, dbAuths);
+        userDetails.setEmployee(employee);
+        return userDetails;
 	}
 
 
@@ -75,7 +89,7 @@ public class CooperationUserDetailsService implements UserDetailsService {
 		List<User> users = userRepository.findByUsername(username);
 		
 		if (users.isEmpty()) {
-			log.debug("No resuts found for user '" + username + "'");
+			logger.debug("No resuts found for user '" + username + "'");
 			throw new UsernameNotFoundException(
                 messages.getMessage("CooperationUserDetailsService.notFound",
                                 new Object[]{username}, "User {0} not found"));
@@ -89,7 +103,7 @@ public class CooperationUserDetailsService implements UserDetailsService {
 			throws CooperationNotFoundException {
         List<Cooperation> cooperations = cooperationRepository.findByName(cooperationName);
         if (cooperations.isEmpty()) {
-            log.debug("No resuts found for cooperation '" + cooperationName + "'");
+            logger.debug("No resuts found for cooperation '" + cooperationName + "'");
             throw new CooperationNotFoundException(
                 messages.getMessage("CooperationUserDetailsService.CooperationNotFound",
                                 new Object[]{cooperationName}, "Cooperation {0} not found"));
@@ -102,7 +116,6 @@ public class CooperationUserDetailsService implements UserDetailsService {
 	protected CooperationUserDetails createUserDetails(User user,
                                 List<GrantedAuthority> combinedAuthorities) {
         return new CooperationUserDetailsImpl(user.getUsername(),
-        		user.getCooperation().getName(),
         		user.getEmail(),
         		user.getPassword(), 
         		user.getEnabled(),
@@ -116,9 +129,8 @@ public class CooperationUserDetailsService implements UserDetailsService {
                   .collect(Collectors.toList());
 	}
 
-    protected Collection<? extends GrantedAuthority> loadGroupAuthorities(
-			User user) {
-    	List<GroupAuthority> authorities = groupAuthorityRepository.findByUser(user);
+    protected Collection<? extends GrantedAuthority> loadGroupAuthorities(Employee employee) {
+    	List<GroupAuthority> authorities = groupAuthorityRepository.findByEmployee(employee);
 		return authorities.stream()
                   .map(p -> new SimpleGrantedAuthority(rolePrefix + p.getAuthority()))
                   .collect(Collectors.toList());
@@ -136,12 +148,24 @@ public class CooperationUserDetailsService implements UserDetailsService {
 		return enableGroups;
 	}
 
+	public boolean getEnableGroups() {
+		return enableGroups;
+	}
+
 	public void setEnableGroups(boolean enableGroups) {
 		this.enableGroups = enableGroups;
 	}
 	
-	public boolean getEnableGroups() {
-		return enableGroups;
+	public boolean isEnableAuthorities() {
+		return enableAuthorities;
+	}
+
+	public boolean getEnableAuthorities() {
+		return enableAuthorities;
+	}
+
+	public void setEnableAuthorities(boolean enableAuthorities) {
+		this.enableAuthorities = enableAuthorities;
 	}
 
 }

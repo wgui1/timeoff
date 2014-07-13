@@ -1,14 +1,18 @@
 package cn.timeoff.security.model;
 
 import java.sql.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.Pattern;
 
 @Entity
 public class User {
@@ -17,14 +21,17 @@ public class User {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
     
-    @ManyToOne
-    @JoinColumn(name="cooperation_id")
-    private Cooperation cooperation;
-
-	@Column(nullable=false, length=128)
+    @OneToMany(mappedBy="user", fetch=FetchType.EAGER)
+    private List<Employee> employees;
+    
+	@Column(nullable=false, length=128, unique=true)
     private String username;
 
-	@Column(nullable=false, length=512, unique=true)
+	@Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
+	        +"[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
+	        +"(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
+	        message="{invalid.email}")
+	@Column(nullable=false, length=512)
     private String email;
 
     @Column(nullable=false, length=512)
@@ -67,12 +74,12 @@ public class User {
 		this.enabled = enabled;
 	}
 
-	public Cooperation getCooperation() {
-		return cooperation;
+	public List<Employee> getEmployees() {
+		return employees;
 	}
 
-	public void setCooperation(Cooperation cooperation) {
-		this.cooperation = cooperation;
+	public void setEmployees(List<Employee> employees) {
+		this.employees = employees;
 	}
 
 	public String getUsername() {
@@ -114,12 +121,27 @@ public class User {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+	
+	public Date getOnboardDate() {
+		return onboardDate;
+	}
+
+	public void setOnboardDate(Date onboardDate) {
+		this.onboardDate = onboardDate;
+	}
+
+	public User getManager() {
+		return manager;
+	}
+
+	public void setManager(User manager) {
+		this.manager = manager;
+	}
 
 	@Override
     public String toString() {
         return String.format(
-            "User[id=%s, firstName='%s', lastName='%s', cooperation='%s']",
-            username, firstName, lastName, cooperation);
+            "User[id=%s, firstName='%s', lastName='%s']",
+            username, firstName, lastName);
     }
-
 }

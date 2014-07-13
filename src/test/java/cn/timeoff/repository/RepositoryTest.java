@@ -13,6 +13,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import cn.timeoff.security.model.Authority;
 import cn.timeoff.security.model.Cooperation;
+import cn.timeoff.security.model.Employee;
 import cn.timeoff.security.model.Group;
 import cn.timeoff.security.model.GroupAuthority;
 import cn.timeoff.security.model.GroupMember;
@@ -23,6 +24,7 @@ import cn.timeoff.security.repository.GroupAuthorityRepository;
 import cn.timeoff.security.repository.GroupMemberRepository;
 import cn.timeoff.security.repository.GroupRepository;
 import cn.timeoff.security.repository.UserRepository;
+import cn.timeoff.security.repository.EmployeeRepository;
 
 @SpringApplicationConfiguration(classes = {cn.timeoff.Application.class})
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -48,12 +50,16 @@ public class RepositoryTest {
 	@Autowired
 	private CooperationRepository cooperationRepository;
 
+	@Autowired
+	private EmployeeRepository employeeRepository;
+
 	@Before
 	public void cleanDB() {
 		groupAuthorityRepository.deleteAll();
 		groupMemberRepository.deleteAll();
 		groupRepository.deleteAll();
 		authorityRepository.deleteAll();
+		employeeRepository.deleteAll();
 		userRepository.deleteAll();
 		cooperationRepository.deleteAll();
 	}
@@ -61,26 +67,26 @@ public class RepositoryTest {
 	@Test
 	public void basicUser() {
         // save a couple of customers
-        User jack = new User("Jack", "jack@24.com", "");
-        jack.setPassword("jack");
-        userRepository.save(jack);
-        User amanda = new User("Amanda", "amanda@24.com", "");
-        amanda.setPassword("amanda");
-        userRepository.save(amanda);
+        User user_jack = new User("Jack", "jack@24.com", "");
+        user_jack.setPassword("jack");
+        userRepository.save(user_jack);
+        User user_amanda = new User("Amanda", "amanda@24.com", "");
+        user_amanda.setPassword("amanda");
+        user_amanda = userRepository.save(user_amanda);
 	}
 
 	@Test
 	public void basicAuthority() {
         // save a couple of customers
-        User jack = new User("Jack", "jack@24.com", "");
-        jack.setPassword("jack");
-        userRepository.save(jack);
+        User user_jack = new User("Jack", "jack@24.com", "");
+        user_jack.setPassword("jack");
+        user_jack = userRepository.save(user_jack);
         
-        Authority authority = new Authority("USER");
-        authority.setUser(jack);
+        Authority authority = new Authority(user_jack, "USER");
+        authority.setUser(user_jack);
         authorityRepository.save(authority);
         
-        assert jack == userRepository.findByUsername("Jack").get(0);
+        assert user_jack == userRepository.findByUsername("Jack").get(0);
 	}
 
 	@Test
@@ -92,8 +98,10 @@ public class RepositoryTest {
 		
         User jack = new User("Jack", "jack@24.com", "");
         jack.setPassword("jack");
-        jack.setCooperation(co);
         jack = userRepository.save(jack);
+        
+        Employee employee_jack = new Employee(jack, co);
+        employee_jack = employeeRepository.save(employee_jack);
 
         Group user_group = new Group();
         user_group.setCooperation(co);
@@ -102,7 +110,7 @@ public class RepositoryTest {
         
         GroupMember group_member = new GroupMember();
         group_member.setGroup(user_group);
-        group_member.setUser(jack);
+        group_member.setEmployee(employee_jack);
         group_member = groupMemberRepository.save(group_member);
         
         GroupAuthority group_authority = new GroupAuthority();
@@ -110,7 +118,7 @@ public class RepositoryTest {
         group_authority.setGroup(user_group);
         group_authority = groupAuthorityRepository.save(group_authority);
         
-        List<GroupAuthority> authorities = groupAuthorityRepository.findByUser(jack);
+        List<GroupAuthority> authorities = groupAuthorityRepository.findByEmployee(employee_jack);
         org.junit.Assert.assertFalse(authorities.isEmpty());
         org.junit.Assert.assertEquals(authorities.get(0).getId(), group_authority.getId());
         org.junit.Assert.assertEquals(authorities.get(0).getAuthority(), "USER");

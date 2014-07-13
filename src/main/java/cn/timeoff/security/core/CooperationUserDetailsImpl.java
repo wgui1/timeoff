@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.util.Assert;
 
 import cn.timeoff.TimeoffVersion;
+import cn.timeoff.security.model.Employee;
 
 public class CooperationUserDetailsImpl implements CooperationUserDetails,
 		CredentialsContainer {
@@ -18,22 +19,22 @@ public class CooperationUserDetailsImpl implements CooperationUserDetails,
 
 	private String password;
     private final String username;
-    private String cooperation;
     private String email;
+    private Employee employee;
+    private String cooperationName;
     private final List<GrantedAuthority> authorities;
     private final boolean accountNonExpired;
     private final boolean accountNonLocked;
     private final boolean credentialsNonExpired;
     private final boolean enabled;
 
-    public CooperationUserDetailsImpl(String username, String cooperation, String password,
+    public CooperationUserDetailsImpl(String username, String password,
     							  String email, boolean enabled, boolean accountNonExpired,
     							  boolean credentialsNonExpired,
                                   boolean accountNonLocked,
                                   Collection<? extends GrantedAuthority> authorities) {
 
         this.username = username;
-        this.cooperation = cooperation;
         this.email = email;
         this.password = password;
         this.enabled = enabled;
@@ -42,11 +43,6 @@ public class CooperationUserDetailsImpl implements CooperationUserDetails,
         this.accountNonLocked = accountNonLocked;
         this.authorities = Collections.unmodifiableList(sortAuthorities(authorities));
     }
-
-	@Override
-	public String getCooperation() {
-		return cooperation;
-	}
 
 	@Override
     public Collection<GrantedAuthority> getAuthorities() {
@@ -98,6 +94,24 @@ public class CooperationUserDetailsImpl implements CooperationUserDetails,
 		return email;
 	}
 
+	@Override
+	public Employee getEmployee() {
+		return employee;
+	}
+	
+	@Override
+	public boolean isEmployee() {
+		return employee != null;
+	}
+
+	@Override
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+		if (isEmployee()) {
+			cooperationName = employee.getCooperation().getName();
+		}
+	}
+
 	private static List<GrantedAuthority> sortAuthorities(Collection<? extends GrantedAuthority> authorities) {
         Assert.notNull(authorities, "Cannot pass a null GrantedAuthority collection");
         if (authorities.stream().anyMatch(g -> g.getAuthority() == null)) {
@@ -108,4 +122,20 @@ public class CooperationUserDetailsImpl implements CooperationUserDetails,
                            .collect(Collectors.toList());
         return asList;
     }
+
+	@Override
+	public String getCooperationName() {
+		return cooperationName;
+	}
+
+	@Override
+	public void setCooperationName(String cooperationName) {
+		this.cooperationName = cooperationName;
+		
+	}
+
+	@Override
+	public boolean hasCooperationName() {
+		return cooperationName != null;
+	}
 }

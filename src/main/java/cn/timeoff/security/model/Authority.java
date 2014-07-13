@@ -27,14 +27,15 @@ public class Authority {
 	@Column(length=50, nullable=false)
     private String authority;
 
-    public Authority() {
-    }
-
     public long getId() {
 		return id;
 	}
 
-    public Authority(String authority) {
+    public Authority() {
+    }
+
+    public Authority(User user, String authority) {
+    	this.user = user;
     	this.authority = authority;
     }
 
