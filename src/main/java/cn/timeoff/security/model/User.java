@@ -14,6 +14,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Pattern;
 
+/**
+ * User account information, support DaoAuthenticationManager
+ * It is always used even it is not used for DaoAuthentication, in that case,
+ * It save just user name and as a bridge connect to employee
+ * @author gawain
+ *
+ */
 @Entity
 public class User {
 	

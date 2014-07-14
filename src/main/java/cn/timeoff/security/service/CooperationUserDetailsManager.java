@@ -7,7 +7,6 @@ import javax.transaction.Transactional;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,12 +15,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserCache;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.userdetails.cache.NullUserCache;
-import org.springframework.security.provisioning.GroupManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.util.Assert;
 
+import cn.timeoff.security.core.CooperationGroupManager;
 import cn.timeoff.security.core.CooperationUserDetails;
 import cn.timeoff.security.model.Authority;
 import cn.timeoff.security.model.Cooperation;
@@ -32,7 +30,8 @@ import cn.timeoff.security.repository.EmployeeRepository;
 import cn.timeoff.security.repository.UserRepository;
 
 @Transactional
-public class CooperationUserDetailsManager extends CooperationUserDetailsService implements UserDetailsManager, GroupManager {
+public class CooperationUserDetailsManager extends CooperationUserDetailsService
+									   	   implements UserDetailsManager, CooperationGroupManager {
 	
 	@Autowired
 	private UserRepository userRepository; 
@@ -148,67 +147,6 @@ public class CooperationUserDetailsManager extends CooperationUserDetailsService
 		return !users.isEmpty();
 	}
 
-	@Override
-	public List<String> findAllGroups() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<String> findUsersInGroup(String groupName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void createGroup(String groupName, List<GrantedAuthority> authorities) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void deleteGroup(String groupName) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void renameGroup(String oldName, String newName) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void addUserToGroup(String username, String group) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void removeUserFromGroup(String username, String groupName) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public List<GrantedAuthority> findGroupAuthorities(String groupName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void addGroupAuthority(String groupName, GrantedAuthority authority) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void removeGroupAuthority(String groupName,
-			GrantedAuthority authority) {
-		// TODO Auto-generated method stub
-		
-	}
-
     /**
      * Optionally sets the UserCache if one is in use in the application.
      * This allows the user to be removed from the cache after updates have taken place to avoid stale data.
@@ -219,5 +157,70 @@ public class CooperationUserDetailsManager extends CooperationUserDetailsService
         Assert.notNull(userCache, "userCache cannot be null");
         this.userCache = userCache;
     }
+
+	@Override
+	public List<String> findAllGroups(String coName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> findUsersInGroup(String coName, String groupName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void createGroup(String coName, String groupName,
+			List<GrantedAuthority> authorities) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteGroup(String coName, String groupName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void renameGroup(String coName, String oldName, String newName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addUserToGroup(String coName, String username, String group) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeUserFromGroup(String coName, String username,
+			String groupName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<GrantedAuthority> findGroupAuthorities(String coName,
+			String groupName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addGroupAuthority(String coName, String groupName,
+			GrantedAuthority authority) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeGroupAuthority(String coName, String groupName,
+			GrantedAuthority authority) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
