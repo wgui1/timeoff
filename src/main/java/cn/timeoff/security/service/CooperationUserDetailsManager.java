@@ -1,6 +1,8 @@
 package cn.timeoff.security.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -24,9 +26,11 @@ import cn.timeoff.security.core.CooperationUserDetails;
 import cn.timeoff.security.model.Authority;
 import cn.timeoff.security.model.Cooperation;
 import cn.timeoff.security.model.Employee;
+import cn.timeoff.security.model.Group;
 import cn.timeoff.security.model.User;
 import cn.timeoff.security.repository.AuthorityRepository;
 import cn.timeoff.security.repository.EmployeeRepository;
+import cn.timeoff.security.repository.GroupRepository;
 import cn.timeoff.security.repository.UserRepository;
 
 @Transactional
@@ -41,6 +45,9 @@ public class CooperationUserDetailsManager extends CooperationUserDetailsService
 
 	@Autowired
 	private EmployeeRepository employeeRepository; 
+
+	@Autowired
+	private GroupRepository groupRepository; 
 	
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -160,7 +167,7 @@ public class CooperationUserDetailsManager extends CooperationUserDetailsService
 
 	@Override
 	public List<String> findAllGroups(String coName) {
-		// TODO Auto-generated method stub
+		List<Group> groups = groupRepository.findByCooperationName(coName);
 		return null;
 	}
 

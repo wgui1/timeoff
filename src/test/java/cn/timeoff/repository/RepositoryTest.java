@@ -90,6 +90,34 @@ public class RepositoryTest {
 	}
 
 	@Test
+	public void basicGroup() {
+		
+		Cooperation co = new Cooperation();
+		co.setName("Timeoff");
+		cooperationRepository.save(co);
+		
+        Group user_group = new Group();
+        user_group.setCooperation(co);
+        user_group.setName("USER");
+        user_group = groupRepository.save(user_group);
+        
+        Group admin_group = new Group();
+        admin_group.setCooperation(co);
+        admin_group.setName("ADMIN");
+        admin_group = groupRepository.save(admin_group);
+        
+        List<Group> groups = groupRepository.findByCooperationName("Timeoff");
+        org.junit.Assert.assertEquals(2, groups.size());
+        org.junit.Assert.assertEquals("ADMIN", groups.get(0).getName());
+        org.junit.Assert.assertEquals("USER", groups.get(1).getName());
+
+        List<String> group_ss = groupRepository.findNameByCooperationName("Timeoff");
+        org.junit.Assert.assertEquals(2, group_ss.size());
+        org.junit.Assert.assertEquals("ADMIN", group_ss.get(0));
+        org.junit.Assert.assertEquals("USER", group_ss.get(1));
+	}
+
+	@Test
 	public void basicGroupAuthority() {
 		
 		Cooperation co = new Cooperation();
@@ -105,7 +133,7 @@ public class RepositoryTest {
 
         Group user_group = new Group();
         user_group.setCooperation(co);
-        user_group.setGroupName("USER");
+        user_group.setName("USER");
         user_group = groupRepository.save(user_group);
         
         GroupMember group_member = new GroupMember();

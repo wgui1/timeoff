@@ -22,7 +22,7 @@ public class Group {
     private Cooperation cooperation;
 
     @Column(length=100, nullable=false)
-    private String groupName;
+    private String name;
 
     public Group() {
 	}
@@ -39,11 +39,11 @@ public class Group {
 		this.cooperation = cooperation;
 	}
 
-	public String getGroupName() {
-		return groupName;
+	public String getName() {
+		return name;
 	}
 
-	public void setGroupName(String groupName) {
-		this.groupName = groupName;
+	public void setName(String name) {
+		this.name = name;
 	}
 }

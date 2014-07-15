@@ -87,12 +87,12 @@ public class  SecurityTest{
 
         Group user_group = new Group();
         user_group.setCooperation(co);
-        user_group.setGroupName("USER");
+        user_group.setName("USER");
         user_group = groupRepository.save(user_group);
         
         Group admin_group = new Group();
         admin_group.setCooperation(co);
-        admin_group.setGroupName("ADMIN");
+        admin_group.setName("ADMIN");
         admin_group = groupRepository.save(admin_group);
         
         GroupAuthority user_authority = new GroupAuthority();
