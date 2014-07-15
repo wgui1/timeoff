@@ -15,4 +15,14 @@ public interface GroupAuthorityRepository extends CrudRepository<GroupAuthority,
 			+ "where gm.group = g and g.cooperation = e.cooperation and e = :employee")
 	public List<GroupAuthority> findByEmployee(@Param("employee") Employee employee);
 
+	@Query(   "select ga.authority from GroupAuthority ga join ga.group g join g.cooperation c "
+			+ "where c.name=:coName and g.name=:groupname")
+	public List<String> findAuthoritiesByCooperationNameAndGroupname(@Param("coName") String coName,
+																	 @Param("groupname") String groupname);
+
+	@Query(   "select ga from GroupAuthority ga join ga.group g join g.cooperation c "
+			+ "where c.name=:coName and g.name=:groupname and ga.authority=:authority")
+	public List<GroupAuthority> findByCooperationNameAndGroupnameAndAuthority(
+                        @Param("coName") String coName, @Param("groupname") String groupname,
+                        @Param("authority") String authority);
 }

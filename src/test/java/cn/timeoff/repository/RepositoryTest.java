@@ -106,15 +106,14 @@ public class RepositoryTest {
         admin_group.setName("ADMIN");
         admin_group = groupRepository.save(admin_group);
         
-        List<Group> groups = groupRepository.findByCooperationName("Timeoff");
+        List<String> groups = groupRepository.findNamesByCooperationName("Timeoff");
         org.junit.Assert.assertEquals(2, groups.size());
-        org.junit.Assert.assertEquals("ADMIN", groups.get(0).getName());
-        org.junit.Assert.assertEquals("USER", groups.get(1).getName());
+        org.junit.Assert.assertEquals("ADMIN", groups.get(0));
+        org.junit.Assert.assertEquals("USER", groups.get(1));
 
-        List<String> group_ss = groupRepository.findNameByCooperationName("Timeoff");
-        org.junit.Assert.assertEquals(2, group_ss.size());
-        org.junit.Assert.assertEquals("ADMIN", group_ss.get(0));
-        org.junit.Assert.assertEquals("USER", group_ss.get(1));
+        List<Group> groupss = groupRepository.findByCooperationNameAndGroupName("Timeoff", "USER");
+        org.junit.Assert.assertEquals(1, groupss.size());
+        org.junit.Assert.assertEquals("USER", groupss.get(0).getName());
 	}
 
 	@Test
@@ -150,6 +149,50 @@ public class RepositoryTest {
         org.junit.Assert.assertFalse(authorities.isEmpty());
         org.junit.Assert.assertEquals(authorities.get(0).getId(), group_authority.getId());
         org.junit.Assert.assertEquals(authorities.get(0).getAuthority(), "USER");
+
+	}
+
+	@Test
+	public void groupMember() {
+		
+		Cooperation co = new Cooperation();
+		co.setName("Timeoff");
+		cooperationRepository.save(co);
+		
+        User jack = new User("Jack", "jack@24.com", "");
+        jack.setPassword("jack");
+        jack = userRepository.save(jack);
+
+        Employee employee_jack = new Employee(jack, co);
+        employee_jack = employeeRepository.save(employee_jack);
+
+        User nina = new User("Nina", "nina@24.com", "");
+        nina.setPassword("nina");
+        nina = userRepository.save(nina);
+        
+        Employee employee_nina = new Employee(nina, co);
+        employee_nina = employeeRepository.save(employee_nina);
+
+        Group user_group = new Group();
+        user_group.setCooperation(co);
+        user_group.setName("USER");
+        user_group = groupRepository.save(user_group);
+        
+        GroupMember group_member = new GroupMember();
+        group_member.setGroup(user_group);
+        group_member.setEmployee(employee_jack);
+        group_member = groupMemberRepository.save(group_member);
+
+        GroupMember group_member_1 = new GroupMember();
+        group_member_1.setGroup(user_group);
+        group_member_1.setEmployee(employee_nina);
+        group_member_1 = groupMemberRepository.save(group_member_1);
+        
+        List<String> members = groupMemberRepository.
+        					    findMembersByCooperationNameAndGroupname("Timeoff", "USER");
+        org.junit.Assert.assertEquals(2, members.size());
+        org.junit.Assert.assertEquals("Jack", members.get(0));
+        org.junit.Assert.assertEquals("Nina", members.get(1));
 
 	}
 

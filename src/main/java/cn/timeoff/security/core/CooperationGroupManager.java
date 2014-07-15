@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 public interface CooperationGroupManager {
     List<String> findAllGroups(String coName);
 
-    List<String> findUsersInGroup(String coName, String groupName);
+    List<String> findEmployeesInGroup(String coName, String groupName);
 
     void createGroup(String coName, String groupName, List<GrantedAuthority> authorities);
 
@@ -15,9 +15,9 @@ public interface CooperationGroupManager {
 
     void renameGroup(String coName, String oldName, String newName);
 
-    void addUserToGroup(String coName, String username, String group);
+    void addEmployeeToGroup(String coName, String username, String group);
 
-    void removeUserFromGroup(String coName, String username, String groupName);
+    void removeEmployeeFromGroup(String coName, String username, String groupName);
 
     List<GrantedAuthority> findGroupAuthorities(String coName, String groupName);
 

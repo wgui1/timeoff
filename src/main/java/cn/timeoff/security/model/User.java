@@ -3,6 +3,7 @@ package cn.timeoff.security.model;
 import java.sql.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,7 +29,8 @@ public class User {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
     
-    @OneToMany(mappedBy="user", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy="user", fetch=FetchType.EAGER,
+    		   cascade=CascadeType.REMOVE)
     private List<Employee> employees;
     
 	@Column(nullable=false, length=128, unique=true)

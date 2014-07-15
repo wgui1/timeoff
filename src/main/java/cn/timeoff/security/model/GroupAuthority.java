@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.springframework.security.core.GrantedAuthority;
+
 @Entity
 public class GroupAuthority {
     @Id
@@ -24,7 +26,12 @@ public class GroupAuthority {
     public GroupAuthority() {
 	}
 
-    public long getId() {
+    public GroupAuthority(Group group, String authority) {
+    	this.group = group;
+    	this.authority = authority;
+	}
+
+	public long getId() {
 		return id;
 	}
 

@@ -24,7 +24,12 @@ public class GroupMember {
     public GroupMember() {
 	}
 
-    public long getId() {
+    public GroupMember(Group group, Employee employee) {
+    	this.group = group;
+    	this.employee = employee;
+	}
+
+	public long getId() {
 		return id;
 	}
 

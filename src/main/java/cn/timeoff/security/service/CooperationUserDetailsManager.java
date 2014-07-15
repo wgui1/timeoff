@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,14 +23,24 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.util.Assert;
 
 import cn.timeoff.security.core.CooperationGroupManager;
+import cn.timeoff.security.core.CooperationNotFoundException;
 import cn.timeoff.security.core.CooperationUserDetails;
+import cn.timeoff.security.core.EmployeeNotFoundException;
+import cn.timeoff.security.core.GroupAuthorityNotFoundException;
+import cn.timeoff.security.core.GroupMemberNotFoundException;
+import cn.timeoff.security.core.GroupNotFoundException;
 import cn.timeoff.security.model.Authority;
 import cn.timeoff.security.model.Cooperation;
 import cn.timeoff.security.model.Employee;
 import cn.timeoff.security.model.Group;
+import cn.timeoff.security.model.GroupAuthority;
+import cn.timeoff.security.model.GroupMember;
 import cn.timeoff.security.model.User;
 import cn.timeoff.security.repository.AuthorityRepository;
+import cn.timeoff.security.repository.CooperationRepository;
 import cn.timeoff.security.repository.EmployeeRepository;
+import cn.timeoff.security.repository.GroupAuthorityRepository;
+import cn.timeoff.security.repository.GroupMemberRepository;
 import cn.timeoff.security.repository.GroupRepository;
 import cn.timeoff.security.repository.UserRepository;
 
@@ -37,6 +48,9 @@ import cn.timeoff.security.repository.UserRepository;
 public class CooperationUserDetailsManager extends CooperationUserDetailsService
 									   	   implements UserDetailsManager, CooperationGroupManager {
 	
+	@Autowired
+	private CooperationRepository cooperationRepository; 
+
 	@Autowired
 	private UserRepository userRepository; 
 
@@ -49,6 +63,12 @@ public class CooperationUserDetailsManager extends CooperationUserDetailsService
 	@Autowired
 	private GroupRepository groupRepository; 
 	
+	@Autowired
+	private GroupMemberRepository groupMemberRepository; 
+
+	@Autowired
+	private GroupAuthorityRepository groupAuthorityRepository; 
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
@@ -167,67 +187,159 @@ public class CooperationUserDetailsManager extends CooperationUserDetailsService
 
 	@Override
 	public List<String> findAllGroups(String coName) {
-		List<Group> groups = groupRepository.findByCooperationName(coName);
-		return null;
+		return groupRepository.findNamesByCooperationName(coName);
 	}
 
 	@Override
-	public List<String> findUsersInGroup(String coName, String groupName) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> findEmployeesInGroup(String coName, String groupname) {
+		return groupMemberRepository.
+				findMembersByCooperationNameAndGroupname(coName, groupname);
 	}
 
 	@Override
-	public void createGroup(String coName, String groupName,
+	public void createGroup(String coName, String groupname,
 			List<GrantedAuthority> authorities) {
-		// TODO Auto-generated method stub
-		
+		Cooperation co = findCooperation(coName);
+		Group group = new Group(co, groupname);
+		final Group group1 = groupRepository.save(group);
+		authorities.stream().map(p -> groupAuthorityRepository.save(
+						new GroupAuthority(group1, p.getAuthority())));
 	}
 
 	@Override
-	public void deleteGroup(String coName, String groupName) {
-		// TODO Auto-generated method stub
-		
+	public void deleteGroup(String coName, String groupname) {
+		Group group = findGroup(coName, groupname);
+		groupRepository.delete(group);
 	}
 
 	@Override
 	public void renameGroup(String coName, String oldName, String newName) {
-		// TODO Auto-generated method stub
-		
+		Group group = findGroup(coName, oldName);
+		group.setName(newName);
+		groupRepository.save(group);
 	}
 
 	@Override
-	public void addUserToGroup(String coName, String username, String group) {
-		// TODO Auto-generated method stub
-		
+	public void addEmployeeToGroup(String coName, String groupname, String username) {
+		Group group = findGroup(coName, groupname);
+		Employee employee = findEmployee(coName, username);
+		GroupMember gm = new GroupMember(group, employee);
+		groupMemberRepository.save(gm);
 	}
 
 	@Override
-	public void removeUserFromGroup(String coName, String username,
-			String groupName) {
-		// TODO Auto-generated method stub
-		
+	public void removeEmployeeFromGroup(String coName, String groupname,
+										String username) {
+		GroupMember gm = findGroupMember(coName, groupname, username);
+		groupMemberRepository.delete(gm);
 	}
 
 	@Override
 	public List<GrantedAuthority> findGroupAuthorities(String coName,
-			String groupName) {
-		// TODO Auto-generated method stub
-		return null;
+                                                       String groupname) {
+		return groupAuthorityRepository.findAuthoritiesByCooperationNameAndGroupname(
+				coName, groupname).stream()
+								  .map(p -> new SimpleGrantedAuthority(p))
+								  .collect(Collectors.toList());
 	}
 
 	@Override
-	public void addGroupAuthority(String coName, String groupName,
+	public void addGroupAuthority(String coName, String groupname,
 			GrantedAuthority authority) {
-		// TODO Auto-generated method stub
-		
+		Group group = findGroup(coName, groupname);
+		GroupAuthority ga = new GroupAuthority(group, authority.getAuthority());
+		groupAuthorityRepository.save(ga);
 	}
 
 	@Override
-	public void removeGroupAuthority(String coName, String groupName,
-			GrantedAuthority authority) {
-		// TODO Auto-generated method stub
-		
+	public void removeGroupAuthority(String coName, String groupname,
+                                     GrantedAuthority authority) {
+		GroupAuthority ga = findGroupAuthority(coName, groupname, authority.getAuthority());
+		groupAuthorityRepository.delete(ga);
 	}
+
+	protected Cooperation findCooperation(String cooperationName)
+			throws CooperationNotFoundException {
+        List<Cooperation> cooperations = cooperationRepository.findByName(cooperationName);
+        if (cooperations.isEmpty()) {
+            logger.debug("No resuts found for cooperation '" + cooperationName + "'");
+            throw new CooperationNotFoundException(
+                messages.getMessage("CooperationUserDetailsService.CooperationNotFound",
+                                new Object[]{cooperationName}, "Cooperation {0} not found"));
+            
+        }
+        Cooperation cooperation = cooperations.get(0);
+        return cooperation;
+    }
+
+	protected Group findGroup(String coName, String groupname)
+			throws GroupNotFoundException {
+		List<Group> groups = groupRepository.
+				findByCooperationNameAndGroupName(coName, groupname);
+        if (groups.isEmpty()) {
+            logger.debug(  "No resuts found for cooperation '" + coName + "'"
+            			 + " and group '" + groupname + "'");
+            throw new GroupNotFoundException(
+                messages.getMessage("CooperationUserDetailsService.GroupNotFound",
+                                new Object[]{groupname, coName}, "Group {0} under Cooperation {1} not found"));
+            
+        }
+        Group group = groups.get(0);
+        return group;
+    }
+
+	protected Employee findEmployee(String coName, String username)
+			throws EmployeeNotFoundException {
+		List<Employee> employees = employeeRepository.
+				findByCooperationNameAndUsername(coName, username);
+        if (employees.isEmpty()) {
+            logger.debug(  "No resuts found for cooperation '" + coName + "'"
+            			 + " and user '" + username + "'");
+            throw new EmployeeNotFoundException(
+                messages.getMessage("CooperationUserDetailsService.EmployeeNotFound",
+                                new Object[]{username, coName},
+                                "User {0} under Cooperation {1} not found"));
+            
+        }
+        Employee employee = employees.get(0);
+        return employee;
+    }
+
+	protected GroupAuthority findGroupAuthority(String coName, String groupname, String authority)
+			throws GroupAuthorityNotFoundException {
+		List<GroupAuthority> groupAuthorities = groupAuthorityRepository.
+				findByCooperationNameAndGroupnameAndAuthority(coName, groupname, authority);
+        if (groupAuthorities.isEmpty()) {
+            logger.debug(  "No resuts found for cooperation '" + coName + "'"
+            			 + " and group '" + groupname + "'"
+            			 + " and authority '" + authority + "'");
+            throw new GroupAuthorityNotFoundException(
+                messages.getMessage("CooperationUserDetailsService.GroupAuthorityNotFound",
+                                new Object[]{authority, groupname, coName},
+                                "Authority {0} under Group {1} Cooperation {2} not found"));
+            
+        }
+        GroupAuthority ga = groupAuthorities.get(0);
+        return ga;
+    }
+
+
+	protected GroupMember findGroupMember(String coName, String groupname, String username)
+			throws GroupMemberNotFoundException {
+		List<GroupMember> groupMembers = groupMemberRepository.
+				findByCooperationNameAndGroupnameAndUsername(coName, groupname, username);
+        if (groupMembers.isEmpty()) {
+            logger.debug(  "No resuts found for cooperation '" + coName + "'"
+            			 + " and group '" + groupname + "'"
+            			 + " and user '" + username + "'");
+            throw new GroupMemberNotFoundException(
+                messages.getMessage("CooperationUserDetailsService.GroupMemberNotFound",
+                        new Object[]{username, groupname, coName},
+                        "Employee {0} under Group {1} Cooperation {2} not found"));
+            
+        }
+        GroupMember groupMember = groupMembers.get(0);
+        return groupMember;
+    }
 
 }

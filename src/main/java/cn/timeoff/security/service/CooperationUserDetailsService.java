@@ -99,20 +99,6 @@ public class CooperationUserDetailsService implements UserDetailsService {
 		return user;
 	}
 
-	protected Cooperation findCooperation(String cooperationName)
-			throws CooperationNotFoundException {
-        List<Cooperation> cooperations = cooperationRepository.findByName(cooperationName);
-        if (cooperations.isEmpty()) {
-            logger.debug("No resuts found for cooperation '" + cooperationName + "'");
-            throw new CooperationNotFoundException(
-                messages.getMessage("CooperationUserDetailsService.CooperationNotFound",
-                                new Object[]{cooperationName}, "Cooperation {0} not found"));
-            
-        }
-        Cooperation cooperation = cooperations.get(0);
-        return cooperation;
-    }
-
 	protected CooperationUserDetails createUserDetails(User user,
                                 List<GrantedAuthority> combinedAuthorities) {
         return new CooperationUserDetailsImpl(user.getUsername(),
