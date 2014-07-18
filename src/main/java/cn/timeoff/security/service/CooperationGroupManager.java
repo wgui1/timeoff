@@ -1,4 +1,4 @@
-package cn.timeoff.security.core;
+package cn.timeoff.security.service;
 
 import java.util.List;
 
@@ -8,6 +8,10 @@ public interface CooperationGroupManager {
     List<String> findAllGroups(String coName);
 
     List<String> findEmployeesInGroup(String coName, String groupName);
+
+    void createCooperation(String coName);
+
+    void deleteCooperation(String coName);
 
     void createGroup(String coName, String groupName, List<GrantedAuthority> authorities);
 

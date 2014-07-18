@@ -16,14 +16,14 @@ public class Application {
 
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(Application.class);
-        UserRepository repository = context.getBean(UserRepository.class);
 
-        // save a couple of customers
-        User jack = new User("Jack", "jack@24.com", "");
-        jack.setPassword("jack");
-        repository.save(jack);
-        User amanda = new User("Amanda", "amanda@24.com", "");
-        amanda.setPassword("amanda");
-        repository.save(amanda);
+//        UserRepository repository = context.getBean(UserRepository.class);
+//        // save a couple of customers
+//        User jack = new User("Jack", "jack@24.com", "");
+//        jack.setPassword("jack");
+//        repository.save(jack);
+//        User amanda = new User("Amanda", "amanda@24.com", "");
+//        amanda.setPassword("amanda");
+//        repository.save(amanda);
     }
 }

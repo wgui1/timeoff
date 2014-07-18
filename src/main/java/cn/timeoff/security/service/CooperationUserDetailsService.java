@@ -17,12 +17,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import cn.timeoff.security.core.CooperationNotFoundException;
 import cn.timeoff.security.core.CooperationSecurityMessageSource;
 import cn.timeoff.security.core.CooperationUserDetails;
 import cn.timeoff.security.core.CooperationUserDetailsImpl;
 import cn.timeoff.security.model.Authority;
-import cn.timeoff.security.model.Cooperation;
 import cn.timeoff.security.model.Employee;
 import cn.timeoff.security.model.GroupAuthority;
 import cn.timeoff.security.model.User;
@@ -102,8 +100,8 @@ public class CooperationUserDetailsService implements UserDetailsService {
 	protected CooperationUserDetails createUserDetails(User user,
                                 List<GrantedAuthority> combinedAuthorities) {
         return new CooperationUserDetailsImpl(user.getUsername(),
-        		user.getEmail(),
         		user.getPassword(), 
+        		user.getEmail(),
         		user.getEnabled(),
                 true, true, true, combinedAuthorities);
     }

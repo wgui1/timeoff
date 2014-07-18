@@ -193,7 +193,12 @@ public class RepositoryTest {
         org.junit.Assert.assertEquals(2, members.size());
         org.junit.Assert.assertEquals("Jack", members.get(0));
         org.junit.Assert.assertEquals("Nina", members.get(1));
+        
+        List<GroupMember> gms = groupMemberRepository.
+        		findByCooperationNameAndGroupnameAndUsername("Timeoff", "Jack", "USER");
+        org.junit.Assert.assertEquals(1, gms.size());
+        org.junit.Assert.assertEquals("Jack", gms.get(0).getEmployee().getUser().getUsername());
+        
 
 	}
-
 }

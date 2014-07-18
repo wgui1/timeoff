@@ -30,18 +30,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
             .userDetailsService(userDetailsService);
-
-        auth
-        	.inMemoryAuthentication()
-            .withUser("user").password("password").roles("USER");
     }
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
             .anyRequest().anonymous()
             .and()
-            .formLogin()
-            .and()
-            .httpBasic();
+            .formLogin();
     }
 }
