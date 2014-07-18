@@ -22,7 +22,6 @@ import org.springframework.security.core.userdetails.cache.NullUserCache;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.util.Assert;
 
-import cn.timeoff.security.core.CooperationGroupManager;
 import cn.timeoff.security.core.CooperationNotFoundException;
 import cn.timeoff.security.core.CooperationUserDetails;
 import cn.timeoff.security.core.EmployeeNotFoundException;
@@ -83,7 +82,7 @@ public class CooperationUserDetailsManager extends CooperationUserDetailsService
 		dbUser = userRepository.save(dbUser);
 
 		if (getEnableAuthorities()) {
-			authorityRepository.save(new Authority(dbUser, "USER"));
+			insertUserAuthorities(dbUser, userDetails);
 		}
 		
 		String cooperationName = coUserDetails.getCooperationName();
@@ -128,7 +127,6 @@ public class CooperationUserDetailsManager extends CooperationUserDetailsService
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
 
         if (currentUser == null) {
-            // This would indicate bad coding somewhere
             throw new AccessDeniedException(
             		messages.getMessage("CooperationUserDetailsService.AccessDenied",
                       "Can't change password as no Authentication object found in context "
@@ -184,6 +182,17 @@ public class CooperationUserDetailsManager extends CooperationUserDetailsService
         Assert.notNull(userCache, "userCache cannot be null");
         this.userCache = userCache;
     }
+
+	@Override
+	public void createCooperation(String coName) {
+		cooperationRepository.save(new Cooperation(coName));
+	}
+
+	@Override
+	public void deleteCooperation(String coName) {
+		Cooperation co = findCooperation(coName);
+		cooperationRepository.delete(co);
+	}
 
 	@Override
 	public List<String> findAllGroups(String coName) {
@@ -245,7 +254,7 @@ public class CooperationUserDetailsManager extends CooperationUserDetailsService
 
 	@Override
 	public void addGroupAuthority(String coName, String groupname,
-			GrantedAuthority authority) {
+                                  GrantedAuthority authority) {
 		Group group = findGroup(coName, groupname);
 		GroupAuthority ga = new GroupAuthority(group, authority.getAuthority());
 		groupAuthorityRepository.save(ga);
@@ -341,5 +350,6 @@ public class CooperationUserDetailsManager extends CooperationUserDetailsService
         GroupMember groupMember = groupMembers.get(0);
         return groupMember;
     }
+
 
 }

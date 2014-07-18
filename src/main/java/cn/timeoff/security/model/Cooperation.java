@@ -21,6 +21,10 @@ public class Cooperation{
 	public Cooperation() {
 	}
 
+	public Cooperation(String coName) {
+		name = coName;
+	}
+
 	public String getName() {
 		return name;
 	}
