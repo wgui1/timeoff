@@ -77,7 +77,8 @@ public class CooperationUserDetailsService implements UserDetailsService {
                 messages.getMessage("CooperationUserDetailsService.notFound",
                             new Object[]{username}, "User {0} has no GrantedAuthority"));
 		}
-        CooperationUserDetails userDetails = createUserDetails(user, dbAuths);
+        CooperationUserDetails userDetails = createUserDetails(user.getUsername(),
+            user.getPassword(), user.getEmail(), user.getEnabled(), dbAuths);
         userDetails.setEmployee(employee);
         return userDetails;
 	}
@@ -97,13 +98,11 @@ public class CooperationUserDetailsService implements UserDetailsService {
 		return user;
 	}
 
-	protected CooperationUserDetails createUserDetails(User user,
-                                List<GrantedAuthority> combinedAuthorities) {
-        return new CooperationUserDetailsImpl(user.getUsername(),
-        		user.getPassword(), 
-        		user.getEmail(),
-        		user.getEnabled(),
-                true, true, true, combinedAuthorities);
+	protected CooperationUserDetails createUserDetails(String username,
+                        String password, String email, boolean isEnabled, 
+                        List<GrantedAuthority> combinedAuthorities) {
+        return new CooperationUserDetailsImpl(username, password, email,
+        		isEnabled, true, true, true, combinedAuthorities);
     }
 
 	protected Collection<? extends GrantedAuthority> loadUserAuthorities(User user) {
