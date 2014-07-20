@@ -15,21 +15,13 @@ import cn.timeoff.security.repository.UserRepository;
 @ComponentScan
 @EnableAutoConfiguration
 @EnableWebMvc
-@EnableWebMvcSecurity
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+//@EnableWebMvcSecurity
+//@EnableWebSecurity
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class Application {
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext context = SpringApplication.run(Application.class);
-
-//        UserRepository repository = context.getBean(UserRepository.class);
-//        // save a couple of customers
-//        User jack = new User("Jack", "jack@24.com", "");
-//        jack.setPassword("jack");
-//        repository.save(jack);
-//        User amanda = new User("Amanda", "amanda@24.com", "");
-//        amanda.setPassword("amanda");
-//        repository.save(amanda);
+        @SuppressWarnings("unused")
+		ConfigurableApplicationContext context = SpringApplication.run(Application.class);
     }
 }

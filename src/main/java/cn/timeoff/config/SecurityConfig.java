@@ -13,10 +13,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import cn.timeoff.security.service.CooperationUserDetailsManager;
 
-//@EnableWebMvcSecurity
-//@EnableWebSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass=true)
 @Configuration
+@EnableWebMvcSecurity
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Bean
@@ -35,16 +35,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
     protected void configure(HttpSecurity http) throws Exception {
         http
-//            .authorizeRequests()
-//                .anyRequest().authenticated()
-//                .and()
-//                .antMatchers("/users/new").hasRole("ANONYMOUS")
-//                .antMatchers(HttpMethod.POST, "/users").hasRole("ANONYMOUS")
+            .authorizeRequests()
+                .antMatchers("/cooperations/**").hasRole("EMPLOYEE")
+                .antMatchers("/login", "/register").permitAll()
+                .and()
             .anonymous()
             	.key("VVV")
             	.and()
             .formLogin()
                 .loginPage("/login");
-//                .permitAll();
     }
 }

@@ -6,13 +6,13 @@
   </head>
   <body>
     <div layout:fragment="content">
-    <form action="/login.html" method="post" th:attr="action=@{/login}">
-        <!--p th:text="${error}" th:if="${error != null}">        
-                Invalid username and password.
+    <form action="/register.html" method="post" th:attr="action=@{/register}">
+        <p th:text="${error}" th:if="${error != null}">        
+                User name has already been used.
         </p>
         <p th:text="${logout}" th:if="${logout != null}">       
                 You have been logged out.
-        </p-->
+        </p>
         <p>
             <label for="username">Username</label>
             <input type="text" id="username" name="username"/>	
@@ -21,10 +21,14 @@
             <label for="password">Password</label>
             <input type="password" id="password" name="password"/>	
         </p>
-        <input type="hidden"                        
+        <p>
+            <label for="email">Email</label>
+            <input type="text" id="email" name="email"/>	
+        </p>
+        <input type="hidden"
             name="csrfName" th:name="${_csrf.parameterName}"
             value="csrfToken" th:value="${_csrf.token}"/>
-        <button type="submit" class="btn">Log in</button>
+        <button type="submit" class="btn">Submit</button>
     </form>
     </div>
   </body>
