@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import cn.timeoff.security.service.CooperationUserDetailsManager;
+import cn.timeoff.security.service.CooperationUserDetailsService;
 
 @Configuration
 @EnableWebMvcSecurity
@@ -20,7 +21,7 @@ import cn.timeoff.security.service.CooperationUserDetailsManager;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Bean
-	public CooperationUserDetailsManager userDetailsManager() {
+	public CooperationUserDetailsManager coUserDetailsManager() {
 		CooperationUserDetailsManager userManager = new CooperationUserDetailsManager();
 		userManager.setRolePrefix("ROLE_");
         return userManager;
@@ -29,6 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
     private UserDetailsService userDetailsService;
 
+	@Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
             .userDetailsService(userDetailsService);
@@ -37,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
                 .antMatchers("/cooperations/**").hasRole("EMPLOYEE")
+                .antMatchers("/myaccount").hasRole("USER")
                 .antMatchers("/login", "/register").permitAll()
                 .and()
             .anonymous()

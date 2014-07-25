@@ -34,6 +34,13 @@ public class LoginController {
 	    return "login";
 	}
 
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public String getLoginPage(@RequestParam("username") String username,
+							   @RequestParam("password") String password,
+                               Model model) {
+	    return "redirect:myaccount";
+	}
+
 	@RequestMapping(value="/myaccount", method=RequestMethod.GET)
 	public String userDetails(@CurrentUser String username, Model model) {
 		CooperationUserDetails userDetails = (CooperationUserDetails) userDetailsManager

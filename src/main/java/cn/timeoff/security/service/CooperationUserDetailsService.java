@@ -60,7 +60,7 @@ public class CooperationUserDetailsService implements UserDetailsService {
 		Employee employee = null;
 		List<Employee> employees = user.getEmployees();
 		
-		if (user.getEmployees().size() == 1) {
+		if (employees.size() == 1) {
 			employee = employees.get(0);
 		}
 		
@@ -82,7 +82,6 @@ public class CooperationUserDetailsService implements UserDetailsService {
         userDetails.setEmployee(employee);
         return userDetails;
 	}
-
 
 	protected User findUser(String username) throws UsernameNotFoundException {
 		List<User> users = userRepository.findByUsername(username);
