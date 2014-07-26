@@ -42,9 +42,7 @@ public class LoginController {
 	}
 
 	@RequestMapping(value="/myaccount", method=RequestMethod.GET)
-	public String userDetails(@CurrentUser String username, Model model) {
-		CooperationUserDetails userDetails = (CooperationUserDetails) userDetailsManager
-											 .loadUserByUsername(username);
+	public String userDetails(@CurrentUser CooperationUserDetails userDetails, Model model) {
 		model.addAttribute("user", userDetails);
 		return "myaccount";
 	}
