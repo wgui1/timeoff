@@ -86,7 +86,8 @@ public class RepositoryTest {
         authority.setUser(user_jack);
         authorityRepository.save(authority);
         
-        assert user_jack == userRepository.findByUsername("Jack").get(0);
+        org.junit.Assert.assertEquals(user_jack.getUsername(),
+        			userRepository.findByUsername("Jack").get(0).getUsername());
 	}
 
 	@Test
