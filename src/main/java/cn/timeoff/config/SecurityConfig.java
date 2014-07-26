@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import cn.timeoff.security.service.CooperationUserDetailsManager;
 import cn.timeoff.security.service.CooperationUserDetailsService;
@@ -26,14 +28,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		userManager.setRolePrefix("ROLE_");
         return userManager;
 	}
+	
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
 	@Autowired
-    private UserDetailsService userDetailsService;
-
-	@Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    public void configureGlobal(AuthenticationManagerBuilder auth,
+    							UserDetailsService userDetailsService,
+    							PasswordEncoder passwordEncoder)
+    						throws Exception {
         auth
-            .userDetailsService(userDetailsService);
+            .userDetailsService(userDetailsService)
+            .passwordEncoder(passwordEncoder);
     }
     protected void configure(HttpSecurity http) throws Exception {
         http

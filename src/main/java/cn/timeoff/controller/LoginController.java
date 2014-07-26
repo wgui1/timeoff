@@ -7,6 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +29,9 @@ public class LoginController {
 
 	@Autowired
 	private UserDetailsManager userDetailsManager;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String getLoginPage(Model model) {
@@ -57,8 +61,9 @@ public class LoginController {
 						 @RequestParam("password") String password,
 						 @RequestParam("email") String email,
 						 Model model) {
+		String encoded_pass = passwordEncoder.encode(password);
 		CooperationUserDetails user = new CooperationUserDetailsImpl(
-				username, password, email, true, true, true, true,
+				username, encoded_pass, email, true, true, true, true,
 				Arrays.asList(new SimpleGrantedAuthority("USER")));
 		userDetailsManager.createUser(user);
 		return "redirect:myaccount";
