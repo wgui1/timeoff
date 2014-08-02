@@ -33,16 +33,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+	
+	@Autowired
+    UserDetailsService userDetailsService;
 
 	@Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth,
-    							UserDetailsService userDetailsService,
-    							PasswordEncoder passwordEncoder)
-    						throws Exception {
+    PasswordEncoder passwordEncoder;
+
+	@Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
             .userDetailsService(userDetailsService)
             .passwordEncoder(passwordEncoder);
     }
+	
+	@Override
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
