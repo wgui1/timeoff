@@ -40,8 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
     PasswordEncoder passwordEncoder;
 
-	@Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+	@Autowired
+    protected void globalConfigure(AuthenticationManagerBuilder auth) throws Exception {
         auth
             .userDetailsService(userDetailsService)
             .passwordEncoder(passwordEncoder);
