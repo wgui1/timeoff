@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import cn.timeoff.security.model.Cooperation;
+import cn.timeoff.security.model.Domain;
 
 @Entity
 public class Organization {
@@ -20,7 +20,7 @@ public class Organization {
 
 	@ManyToOne
     @JoinColumn(name="cooperation_id")
-    private Cooperation cooperation;
+    private Domain cooperation;
 
 	public Organization() {
 		super();

@@ -1,18 +1,14 @@
 package cn.timeoff.security.model;
 
 import java.sql.Date;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.Pattern;
 
 /**
@@ -29,10 +25,10 @@ public class User {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
     
-    @OneToMany(mappedBy="user", fetch=FetchType.EAGER,
-    		   cascade=CascadeType.REMOVE)
-    private List<Employee> employees;
-    
+    @ManyToOne
+    @JoinColumn(name="domain_id")
+    private Domain domain;
+
 	@Column(nullable=false, length=128, unique=true)
     private String username;
 
@@ -65,7 +61,8 @@ public class User {
     public User() {
 	}
 
-    public User(String username, String email, String password) {
+    public User(Domain domain, String username, String email, String password) {
+		this.domain = domain;
 		this.username = username;
 		this.email = email;
 		this.password = password;
@@ -83,15 +80,15 @@ public class User {
 		this.enabled = enabled;
 	}
 
-	public List<Employee> getEmployees() {
-		return employees;
-	}
+	public Domain getDomain() {
+        return domain;
+    }
 
-	public void setEmployees(List<Employee> employees) {
-		this.employees = employees;
-	}
+    public void setDomain(Domain domain) {
+        this.domain = domain;
+    }
 
-	public String getUsername() {
+    public String getUsername() {
 		return username;
 	}
 

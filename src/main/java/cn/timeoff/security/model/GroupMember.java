@@ -18,15 +18,19 @@ public class GroupMember {
     private Group group;
 
 	@ManyToOne
-    @JoinColumn(name="employee_id")
-    private Employee employee;
+    @JoinColumn(name="user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name="domain_id")
+    private Domain domain;
 
     public GroupMember() {
 	}
 
-    public GroupMember(Group group, Employee employee) {
+    public GroupMember(Group group, User user) {
     	this.group = group;
-    	this.employee = employee;
+    	this.user = user;
 	}
 
 	public long getId() {
@@ -41,12 +45,12 @@ public class GroupMember {
 		this.group = group;
 	}
 
-	public Employee getEmployee() {
-		return employee;
+	public User getUser() {
+		return user;
 	}
 
-	public void setEmployee(Employee employee) {
-		this.employee = employee;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }

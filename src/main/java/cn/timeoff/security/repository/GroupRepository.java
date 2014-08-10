@@ -10,12 +10,12 @@ import cn.timeoff.security.model.Group;
 
 public interface GroupRepository extends CrudRepository<Group, Long> {
 	
-	@Query(   "select g from Group g join g.cooperation c where c.name=:coName "
+	@Query(   "select g from Group g join g.domain d where d.name=:doName "
 			+ "and g.name=:groupname")
-	public List<Group> findByCooperationNameAndGroupName(@Param("coName") String coName,
-														 @Param("groupname") String groupname);
+	public List<Group> findByDomainNameAndGroupName(@Param("doName") String doName,
+                                                    @Param("groupname") String groupname);
 
-	@Query("select g.name from Group g join g.cooperation c where c.name=:name order by g.name asc")
-	public List<String> findNamesByCooperationName(@Param("name") String name);
+	@Query("select g.name from Group g join g.domain d where d.name=:name order by g.name asc")
+	public List<String> findNamesByDomainName(@Param("name") String name);
 
 }

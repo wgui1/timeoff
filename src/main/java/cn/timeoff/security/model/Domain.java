@@ -6,7 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Cooperation{
+public class Domain{
 
 	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -18,10 +18,10 @@ public class Cooperation{
 		return id;
 	}
 
-	public Cooperation() {
+	public Domain() {
 	}
 
-	public Cooperation(String coName) {
+	public Domain(String coName) {
 		name = coName;
 	}
 

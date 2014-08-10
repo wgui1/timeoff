@@ -17,7 +17,7 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name="groups",
        uniqueConstraints = {
-       @UniqueConstraint(columnNames = {"cooperation_id", "name"} )
+       @UniqueConstraint(columnNames = {"domain_id", "name"} )
 } )
 public class Group {
 	
@@ -26,8 +26,8 @@ public class Group {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="cooperation_id")
-    private Cooperation cooperation;
+    @JoinColumn(name="domain_id")
+    private Domain domain;
 
     @Column(length=100, nullable=false)
     private String name;
@@ -41,8 +41,8 @@ public class Group {
     public Group() {
 	}
 
-    public Group(Cooperation co, String name) {
-    	cooperation = co;
+    public Group(Domain domain, String name) {
+    	this.domain = domain;
     	this.name = name;
 	}
 
@@ -50,12 +50,12 @@ public class Group {
 		return id;
 	}
 
-	public Cooperation getCooperation() {
-		return cooperation;
+	public Domain getDomain() {
+		return domain;
 	}
 
-	public void setCooperation(Cooperation cooperation) {
-		this.cooperation = cooperation;
+	public void setDomain(Domain domain) {
+		this.domain = domain;
 	}
 
 	public String getName() {

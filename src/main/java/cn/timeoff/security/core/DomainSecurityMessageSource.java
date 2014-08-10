@@ -4,16 +4,16 @@ import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
 
-public class CooperationSecurityMessageSource extends ResourceBundleMessageSource {
+public class DomainSecurityMessageSource extends ResourceBundleMessageSource {
     //~ Constructors ===================================================================================================
 
-    public CooperationSecurityMessageSource() {
+    public DomainSecurityMessageSource() {
         setBasename("cn.timeoff.security.core.messages");
     }
 
     //~ Methods ========================================================================================================
 
     public static MessageSourceAccessor getAccessor() {
-        return new MessageSourceAccessor(new CooperationSecurityMessageSource());
+        return new MessageSourceAccessor(new DomainSecurityMessageSource());
     }
 }

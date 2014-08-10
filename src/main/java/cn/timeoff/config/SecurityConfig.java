@@ -13,8 +13,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import cn.timeoff.security.service.CooperationUserDetailsManager;
-import cn.timeoff.security.service.CooperationUserDetailsService;
+import cn.timeoff.security.service.DomainUserDetailsManager;
+import cn.timeoff.security.service.DomainUserDetailsManagerImpl;
 
 @Configuration
 @EnableWebMvcSecurity
@@ -23,8 +23,8 @@ import cn.timeoff.security.service.CooperationUserDetailsService;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Bean
-	public CooperationUserDetailsManager coUserDetailsManager() {
-		CooperationUserDetailsManager userManager = new CooperationUserDetailsManager();
+	public DomainUserDetailsManager DomainUserDetailsManager() {
+		DomainUserDetailsManagerImpl userManager = new DomainUserDetailsManagerImpl();
 		userManager.setRolePrefix("ROLE_");
         return userManager;
 	}
