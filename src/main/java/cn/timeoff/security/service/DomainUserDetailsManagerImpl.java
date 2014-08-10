@@ -101,6 +101,7 @@ public class DomainUserDetailsManagerImpl extends DomainUserDetailsServiceImpl
     @Override
     public void deleteUser(String domainName, String username) {
         User user = findUser(domainName, username);
+        authorityRepository.deleteByUser(user);
         userRepository.delete(user);
     }
 

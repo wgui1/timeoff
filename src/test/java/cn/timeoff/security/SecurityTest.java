@@ -19,6 +19,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import cn.timeoff.security.core.DomainUserDetails;
 import cn.timeoff.security.core.DomainUserDetailsImpl;
+import cn.timeoff.security.core.UserNotFoundException;
 import cn.timeoff.security.model.Domain;
 import cn.timeoff.security.model.Group;
 import cn.timeoff.security.model.GroupAuthority;
@@ -135,7 +136,7 @@ public class  SecurityTest{
 		org.junit.Assert.assertEquals("ROLE_USER", auths.get(1).getAuthority());
 	}
 		
-	@Test
+	@Test(expected=UserNotFoundException.class)
 	public void deleteUser() {
 		Domain domain = new Domain();
 		domain.setName("Timeoff");
@@ -146,9 +147,7 @@ public class  SecurityTest{
 				Arrays.asList( new SimpleGrantedAuthority("USER") ));
 		userDetailsManager.createUser(user);
 		userDetailsManager.deleteUser("Timeoff", "Jack");
-		UserDetails jack_details = userDetailsManager.loadUserByDomainNameAndUsername("Timeoff", "Jack");
-		org.junit.Assert.assertEquals(1, jack_details.getAuthorities().size());
-		org.junit.Assert.assertFalse(jack_details.isEnabled());
+		userDetailsManager.loadUserByDomainNameAndUsername("Timeoff", "Jack");
 	}
 		
 	@Test
@@ -176,6 +175,9 @@ public class  SecurityTest{
 
 	@Test
 	public void userExists() {
+		Domain domain = new Domain();
+		domain.setName("Timeoff");
+		domain = domainRepository.save(domain);
 		DomainUserDetails user = new DomainUserDetailsImpl("Timeoff",
 				"Jack", "1234", "jack@24.hours", true, true, true, true,
 				Arrays.asList( new SimpleGrantedAuthority("USER") ));
@@ -187,6 +189,9 @@ public class  SecurityTest{
 	
 	@Test
 	public void basicGroups() {
+		Domain domain = new Domain();
+		domain.setName("Timeoff");
+		domain = domainRepository.save(domain);
         userDetailsManager.createDomain("Timeoff");
 		userDetailsManager.createGroup("Timeoff", "EMPLOYEE",
 								   Arrays.asList( new SimpleGrantedAuthority("EMPLOYEE")));
