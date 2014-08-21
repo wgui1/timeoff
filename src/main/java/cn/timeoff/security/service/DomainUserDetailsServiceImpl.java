@@ -35,6 +35,7 @@ public class DomainUserDetailsServiceImpl implements DomainUserDetailsService {
 
     private String rolePrefix = "";
     protected String defaultDomainName = "";
+    protected boolean enableDefaultDomainQuery = false;
     private boolean enableAuthorities = true;
     private boolean enableGroups = true;
     
@@ -79,9 +80,12 @@ public class DomainUserDetailsServiceImpl implements DomainUserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
-        return loadUserByDomainNameAndUsername(defaultDomainName, username);
+        UserDetails rc = null;
+        if (enableDefaultDomainQuery) {
+            rc = loadUserByDomainNameAndUsername(defaultDomainName, username);
+        }
+        return rc;
     }
-
 
     protected User findUser(String domainName, String username)
                                 throws UsernameNotFoundException {
@@ -152,6 +156,14 @@ public class DomainUserDetailsServiceImpl implements DomainUserDetailsService {
 
     public void setEnableAuthorities(boolean enableAuthorities) {
         this.enableAuthorities = enableAuthorities;
+    }
+
+    public boolean isEnableDefaultDomainQuery() {
+        return enableDefaultDomainQuery;
+    }
+
+    public void setEnableDefaultDomainQuery(boolean enableDefaultDomainQuery) {
+        this.enableDefaultDomainQuery = enableDefaultDomainQuery;
     }
 
 }

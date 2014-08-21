@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import cn.timeoff.security.core.DomainDaoAuthenticationProvider;
+import cn.timeoff.security.core.DomainUsernamePasswordAuthenticationFilter;
 import cn.timeoff.security.service.DomainUserDetailsManager;
 import cn.timeoff.security.service.DomainUserDetailsManagerImpl;
 
@@ -21,9 +23,15 @@ import cn.timeoff.security.service.DomainUserDetailsManagerImpl;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    
+    @Bean
+    public DomainDaoAuthenticationProvider domainDaoAuthenticationProvider() {
+        return new DomainDaoAuthenticationProvider();
+    }
+
 
 	@Bean
-	public DomainUserDetailsManager DomainUserDetailsManager() {
+	public DomainUserDetailsManager domainUserDetailsManager() {
 		DomainUserDetailsManagerImpl userManager = new DomainUserDetailsManagerImpl();
 		userManager.setRolePrefix("ROLE_");
         return userManager;
@@ -34,6 +42,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 	
+	@SuppressWarnings("deprecation")
+    @Bean
+	public DomainUsernamePasswordAuthenticationFilter domainUsernamePasswordAuthenticationFilter() {
+	    DomainUsernamePasswordAuthenticationFilter filter = new DomainUsernamePasswordAuthenticationFilter();
+	    filter.setFilterProcessesUrl("/login");
+	    filter.setDomainParameter("cooperation");
+	    return filter;
+	}
+	
 	@Autowired
     UserDetailsService userDetailsService;
 
@@ -41,10 +58,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     PasswordEncoder passwordEncoder;
 
 	@Autowired
+    DomainDaoAuthenticationProvider domainAuthenticationProvider;
+	
+	@Autowired 
+	DomainUsernamePasswordAuthenticationFilter domainUserPasswordAuthenticationFilter;
+
+	@Autowired
     protected void globalConfigure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-            .userDetailsService(userDetailsService)
-            .passwordEncoder(passwordEncoder);
+	    domainAuthenticationProvider.setUserDetailsService(userDetailsService);
+	    domainAuthenticationProvider.setPasswordEncoder(passwordEncoder);
+        auth.authenticationProvider(domainAuthenticationProvider);
     }
 	
 	@Override
@@ -53,12 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
                 .antMatchers("/cooperations/**").hasRole("EMPLOYEE")
                 .antMatchers("/myaccount").hasRole("USER")
-                .antMatchers("/login", "/register").permitAll()
-                .and()
-            .anonymous()
-            	.key("VVV")
-            	.and()
-            .formLogin()
-                .loginPage("/login");
+                .antMatchers("/login", "/register").permitAll();
+        http.addFilter(domainUserPasswordAuthenticationFilter);
     }
 }
