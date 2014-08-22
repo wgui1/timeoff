@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -25,58 +27,65 @@ import cn.timeoff.security.service.DomainUserDetailsManagerImpl;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Bean
-    public DomainDaoAuthenticationProvider domainDaoAuthenticationProvider() {
-        return new DomainDaoAuthenticationProvider();
-    }
-
-
-	@Bean
-	public DomainUserDetailsManager domainUserDetailsManager() {
-		DomainUserDetailsManagerImpl userManager = new DomainUserDetailsManagerImpl();
-		userManager.setRolePrefix("ROLE_");
+    public DomainUserDetailsManager domainUserDetailsManager() {
+        DomainUserDetailsManagerImpl userManager = new DomainUserDetailsManagerImpl();
+        userManager.setRolePrefix("ROLE_");
         return userManager;
-	}
-	
-	@Bean
-	public BCryptPasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-	
-	@SuppressWarnings("deprecation")
+    }
+    
     @Bean
-	public DomainUsernamePasswordAuthenticationFilter domainUsernamePasswordAuthenticationFilter() {
-	    DomainUsernamePasswordAuthenticationFilter filter = new DomainUsernamePasswordAuthenticationFilter();
-	    filter.setFilterProcessesUrl("/login");
-	    filter.setDomainParameter("cooperation");
-	    return filter;
-	}
-	
-	@Autowired
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+    
+    @Autowired
     UserDetailsService userDetailsService;
 
-	@Autowired
+    @Autowired
     PasswordEncoder passwordEncoder;
 
-	@Autowired
-    DomainDaoAuthenticationProvider domainAuthenticationProvider;
-	
-	@Autowired 
-	DomainUsernamePasswordAuthenticationFilter domainUserPasswordAuthenticationFilter;
+    @Bean
+    @Autowired
+    public DomainDaoAuthenticationProvider domainDaoAuthenticationProvider(
+                                    UserDetailsService userDetailsService,
+                                    PasswordEncoder passwordEncoder) {
+        DomainDaoAuthenticationProvider domainAuthenticationProvider =
+                                         new DomainDaoAuthenticationProvider();
+        domainAuthenticationProvider.setUserDetailsService(userDetailsService);
+        domainAuthenticationProvider.setPasswordEncoder(passwordEncoder);
+        return domainAuthenticationProvider;
+    }
 
-	@Autowired
+    @SuppressWarnings("deprecation")
+    @Bean
+    @Autowired
+    public DomainUsernamePasswordAuthenticationFilter domainUsernamePasswordAuthenticationFilter(
+                                        AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        DomainUsernamePasswordAuthenticationFilter filter = new DomainUsernamePasswordAuthenticationFilter();
+        filter.setAuthenticationManager(authenticationConfiguration.getAuthenticationManager());
+        filter.setFilterProcessesUrl("/login");
+        filter.setDomainParameter("cooperation");
+        return filter;
+    }
+
+    @Autowired
+    DomainDaoAuthenticationProvider domainAuthenticationProvider;
+
+    @Autowired 
+    DomainUsernamePasswordAuthenticationFilter domainUserPasswordAuthenticationFilter;
+
+    @Autowired
     protected void globalConfigure(AuthenticationManagerBuilder auth) throws Exception {
-	    domainAuthenticationProvider.setUserDetailsService(userDetailsService);
-	    domainAuthenticationProvider.setPasswordEncoder(passwordEncoder);
         auth.authenticationProvider(domainAuthenticationProvider);
     }
-	
-	@Override
+
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
                 .antMatchers("/cooperations/**").hasRole("EMPLOYEE")
                 .antMatchers("/myaccount").hasRole("USER")
                 .antMatchers("/login", "/register").permitAll();
-        http.addFilter(domainUserPasswordAuthenticationFilter);
+        http.addFilterBefore(domainUserPasswordAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }
