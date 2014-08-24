@@ -234,10 +234,6 @@ public final class FormLoginConfigurer<H extends HttpSecurityBuilder<H>> extends
         return new AntPathRequestMatcher(loginProcessingUrl, "POST");
     }
 
-    private String getDomainParameter() {
-        return getAuthenticationFilter().getDomainParameter();
-    }
-
     /**
      * Gets the HTTP parameter that is used to submit the username.
      *

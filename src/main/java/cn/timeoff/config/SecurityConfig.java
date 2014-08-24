@@ -3,6 +3,8 @@ package cn.timeoff.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import cn.timeoff.config.hackspring.HttpSecurity;
 import cn.timeoff.config.hackspring.WebSecurityConfigurerAdapter;
 import cn.timeoff.security.core.DomainDaoAuthenticationProvider;
-import cn.timeoff.security.core.DomainUsernamePasswordAuthenticationFilter;
 import cn.timeoff.security.service.DomainUserDetailsManager;
 import cn.timeoff.security.service.DomainUserDetailsManagerImpl;
 
@@ -29,6 +30,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         DomainUserDetailsManagerImpl userManager = new DomainUserDetailsManagerImpl();
         userManager.setRolePrefix("ROLE_");
         return userManager;
+    }
+    
+    @Bean ObjectPostProcessor postProcessor() {
+        return new ObjectPostProcessor<AccessDecisionManager>() {
+
+            @Override
+            public <O extends AccessDecisionManager> O postProcess(O object) {
+                object.
+                return null;
+            }
+            
+        };
     }
     
     @Bean
