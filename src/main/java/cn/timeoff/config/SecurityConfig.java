@@ -4,17 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import cn.timeoff.config.hackspring.HttpSecurity;
+import cn.timeoff.config.hackspring.WebSecurityConfigurerAdapter;
 import cn.timeoff.security.core.DomainDaoAuthenticationProvider;
 import cn.timeoff.security.core.DomainUsernamePasswordAuthenticationFilter;
 import cn.timeoff.security.service.DomainUserDetailsManager;
@@ -56,23 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return domainAuthenticationProvider;
     }
 
-    @SuppressWarnings("deprecation")
-    @Bean
-    @Autowired
-    public DomainUsernamePasswordAuthenticationFilter domainUsernamePasswordAuthenticationFilter(
-                                        AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        DomainUsernamePasswordAuthenticationFilter filter = new DomainUsernamePasswordAuthenticationFilter();
-        filter.setAuthenticationManager(authenticationConfiguration.getAuthenticationManager());
-        filter.setFilterProcessesUrl("/login");
-        filter.setDomainParameter("cooperation");
-        return filter;
-    }
-
     @Autowired
     DomainDaoAuthenticationProvider domainAuthenticationProvider;
-
-    @Autowired 
-    DomainUsernamePasswordAuthenticationFilter domainUserPasswordAuthenticationFilter;
 
     @Autowired
     protected void globalConfigure(AuthenticationManagerBuilder auth) throws Exception {
@@ -83,9 +66,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
+                .antMatchers("/login", "/register").permitAll()
                 .antMatchers("/cooperations/**").hasRole("EMPLOYEE")
                 .antMatchers("/myaccount").hasRole("USER")
-                .antMatchers("/login", "/register").permitAll();
-        http.addFilterBefore(domainUserPasswordAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .and()
+            .anonymous()
+                .and()
+            .formLogin()
+                .loginPage("/login")
+                .permitAll()
+                .domainParameter("cooperation");
     }
 }

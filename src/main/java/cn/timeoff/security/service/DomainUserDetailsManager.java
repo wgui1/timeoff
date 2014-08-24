@@ -21,7 +21,7 @@ public interface DomainUserDetailsManager extends UserDetailsManager{
 
     void renameGroup(String doName, String oldName, String newName);
 
-    void addUserToGroup(String doName, String username, String group);
+    void addUserToGroup(String doName, String group, String username);
 
     void removeUserFromGroup(String doName, String username, String groupName);
 

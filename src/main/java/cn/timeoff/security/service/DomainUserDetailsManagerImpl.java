@@ -220,9 +220,10 @@ public class DomainUserDetailsManagerImpl extends DomainUserDetailsServiceImpl
                             List<GrantedAuthority> authorities) {
         Domain domain = findDomain(doName);
         Group group = new Group(domain, groupname);
-        final Group group1 = groupRepository.save(group);
+        Group group1 = groupRepository.save(group);
         authorities.stream().map(p -> groupAuthorityRepository.save(
-                        new GroupAuthority(group1, p.getAuthority())));
+                        new GroupAuthority(group1, p.getAuthority())))
+                        .toArray();
     }
 
     @Override

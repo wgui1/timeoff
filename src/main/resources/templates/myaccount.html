@@ -8,6 +8,7 @@
   <body>
     <div layout:fragment="content">
     <ol>
+        <li th:text="|${user.domain.name}|">name</li>
         <li th:text="|${user.username}|">name</li>
         <li th:text="|${user.email}|">email</li>
         <li th:text="|${user.password}|">email</li>
