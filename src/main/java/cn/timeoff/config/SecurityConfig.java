@@ -1,5 +1,6 @@
 package cn.timeoff.config;
 
+import org.aopalliance.intercept.MethodInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +23,6 @@ import cn.timeoff.security.service.DomainUserDetailsManagerImpl;
 @Configuration
 @EnableWebMvcSecurity
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Bean
@@ -30,18 +30,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         DomainUserDetailsManagerImpl userManager = new DomainUserDetailsManagerImpl();
         userManager.setRolePrefix("ROLE_");
         return userManager;
-    }
-    
-    @Bean ObjectPostProcessor postProcessor() {
-        return new ObjectPostProcessor<AccessDecisionManager>() {
-
-            @Override
-            public <O extends AccessDecisionManager> O postProcess(O object) {
-                object.
-                return null;
-            }
-            
-        };
     }
     
     @Bean
