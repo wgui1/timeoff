@@ -22,55 +22,27 @@ import cn.timeoff.security.core.CurrentUser;
 import cn.timeoff.security.service.DomainUserDetailsManager;
 
 @Controller
-@Transactional
-public class LoginController {
+public interface LoginController {
 
-    protected final Log logger = LogFactory.getLog(getClass());
-
-    @Autowired
-    private DomainUserDetailsManager userDetailsManager;
-    
-    @Autowired
-    private PasswordEncoder passwordEncoder;
     
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String getLoginPage(Model model) {
-        return "login";
-    }
+    String getLoginPage(Model model);
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String getLoginPage(@RequestParam("username") String username,
+    String getLoginPage(@RequestParam("username") String username,
                                @RequestParam("password") String password,
-                               Model model) {
-        return "redirect:myaccount";
-    }
+                               Model model);
 
     @RequestMapping(value="/myaccount", method=RequestMethod.GET)
-    public String userDetails(@CurrentUser DomainUserDetails userDetails, Model model) {
-        model.addAttribute("user", userDetails);
-        return "myaccount";
-    }
+    String userDetails(@CurrentUser DomainUserDetails userDetails, Model model);
 
     @RequestMapping(value="/register", method=RequestMethod.GET)
-    public String new_form() {
-        return "register";
-    }
+    String new_form();
     
     @RequestMapping(value="/register", method=RequestMethod.POST)
-    public String createCooperation(@RequestParam("cooperation") String domainName,
+    String createCooperation(@RequestParam("cooperation") String domainName,
                          @RequestParam("username") String username,
                          @RequestParam("password") String password,
                          @RequestParam("email") String email,
-                         Model model) {
-        String encoded_pass = passwordEncoder.encode(password);
-        DomainUserDetails user = new DomainUserDetailsImpl(domainName,
-                username, encoded_pass, email, true, true, true, true,
-                new ArrayList<SimpleGrantedAuthority>());
-        userDetailsManager.createDomain(domainName);
-        userDetailsManager.createUser(user);
-        userDetailsManager.createGroup(domainName, "ADMIN",
-                                       Arrays.asList(new SimpleGrantedAuthority("ADMIN")));
-        userDetailsManager.addUserToGroup(domainName, "ADMIN", username);
-        return "redirect:myaccount";
-    }
+                         Model model);
 }
