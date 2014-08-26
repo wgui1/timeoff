@@ -18,11 +18,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import cn.timeoff.config.hackspring.HttpSecurity;
-import cn.timeoff.config.hackspring.WebSecurityConfigurerAdapter;
 import cn.timeoff.security.core.DomainDaoAuthenticationProvider;
 import cn.timeoff.security.service.DomainUserDetailsManager;
 import cn.timeoff.security.service.DomainUserDetailsManagerImpl;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 
 import java.util.List;
 import java.util.Map;
@@ -48,7 +47,7 @@ import org.springframework.util.Assert;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@Order(Ordered.LOWEST_PRECEDENCE - 4)
+@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class CustomGlobalMethodSecurityConfiguration extends
         GlobalMethodSecurityConfiguration {
     

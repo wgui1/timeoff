@@ -15,9 +15,6 @@ import cn.timeoff.security.repository.UserRepository;
 @ComponentScan
 @EnableAutoConfiguration
 @EnableWebMvc
-//@EnableWebMvcSecurity
-//@EnableWebSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class Application {
 
     public static void main(String[] args) {
