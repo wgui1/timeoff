@@ -3,6 +3,7 @@ package cn.timeoff.config;
 import java.util.ArrayList;
 
 import org.aopalliance.intercept.MethodInterceptor;
+import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -21,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import cn.timeoff.security.core.DomainDaoAuthenticationProvider;
 import cn.timeoff.security.service.DomainUserDetailsManager;
 import cn.timeoff.security.service.DomainUserDetailsManagerImpl;
+
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 
 import java.util.List;
@@ -36,7 +38,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.core.Ordered;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.annotation.Jsr250Voter;
+import org.springframework.security.access.expression.AbstractSecurityExpressionHandler;
+import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.ExpressionBasedPreInvocationAdvice;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.access.prepost.PreInvocationAuthorizationAdviceVoter;
 import org.springframework.security.access.vote.AffirmativeBased;
@@ -46,11 +51,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.util.Assert;
 
 @Configuration
+@EnableWebSecurity
+@EnableWebMvcSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class CustomGlobalMethodSecurityConfiguration extends
         GlobalMethodSecurityConfiguration {
-    
+	
     private AnnotationAttributes enableMethodSecurity;
 
     @Bean
@@ -83,6 +90,16 @@ public class CustomGlobalMethodSecurityConfiguration extends
         return domainAuthenticationProvider;
     }
 
+    @Bean
+    public RoleHierarchy RoleHierarchyBean() {
+        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+        roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_USER ROLE_USER > ROLE_ANONYMOUS");
+        return roleHierarchy;
+    }
+
+	@Autowired
+	private RoleHierarchy roleHierarchy;
+	
     @Autowired
     DomainDaoAuthenticationProvider domainAuthenticationProvider;
 
@@ -90,26 +107,24 @@ public class CustomGlobalMethodSecurityConfiguration extends
     protected void globalConfigure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(domainAuthenticationProvider);
     }
-
-//    @Bean
-//    @Autowired
-//    public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-//        return authenticationConfiguration.getAuthenticationManager();
-//    }
-
+    
+    @Bean
     protected RoleHierarchyVoter roleHierarchyVoter() {
-        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-        roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_USER ROLE_USER > ROLE_ANONYMOUS");
         RoleHierarchyVoter roleHierarchyVoter = new RoleHierarchyVoter(roleHierarchy);
         return roleHierarchyVoter;
-        
     }
 
+    @Bean
     @SuppressWarnings("rawtypes")
-    protected AccessDecisionManager accessDecisionManager() {
+    public AccessDecisionManager accessDecisionManager() {
         List<AccessDecisionVoter> decisionVoters = new ArrayList<AccessDecisionVoter>();
         ExpressionBasedPreInvocationAdvice expressionAdvice = new ExpressionBasedPreInvocationAdvice();
-        expressionAdvice.setExpressionHandler(getExpressionHandler());
+        DefaultMethodSecurityExpressionHandler expressionHandler = 
+        		(DefaultMethodSecurityExpressionHandler) getExpressionHandler();
+        expressionHandler.setRoleHierarchy(roleHierarchy);
+        expressionAdvice.setExpressionHandler(expressionHandler);
+        //expressionAdvice.setExpressionHandler(getExpressionHandler());
+
         if(prePostEnabled()) {
             decisionVoters.add(new PreInvocationAuthorizationAdviceVoter(
                 expressionAdvice));
