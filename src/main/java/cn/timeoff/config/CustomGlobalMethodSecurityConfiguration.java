@@ -148,7 +148,6 @@ public class CustomGlobalMethodSecurityConfiguration extends
 
     private AnnotationAttributes enableMethodSecurity() {
         if (enableMethodSecurity == null) {
-            // if it is null look at this instance (i.e. a subclass was used)
             EnableGlobalMethodSecurity methodSecurityAnnotation = AnnotationUtils
                     .findAnnotation(getClass(),
                             EnableGlobalMethodSecurity.class);
