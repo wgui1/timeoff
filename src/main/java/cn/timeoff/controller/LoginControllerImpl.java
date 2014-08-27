@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -28,10 +27,10 @@ public class LoginControllerImpl implements LoginController{
 
     @Autowired
     private DomainUserDetailsManager userDetailsManager;
-    
+
     @Autowired
     private PasswordEncoder passwordEncoder;
-    
+
     public String getLoginPage(Model model) {
         return "login";
     }
@@ -50,7 +49,7 @@ public class LoginControllerImpl implements LoginController{
     public String new_form() {
         return "register";
     }
-    
+
     public String createCooperation(@RequestParam("cooperation") String domainName,
                          @RequestParam("username") String username,
                          @RequestParam("password") String password,

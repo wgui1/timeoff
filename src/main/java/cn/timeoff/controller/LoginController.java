@@ -1,15 +1,5 @@
 package cn.timeoff.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import javax.transaction.Transactional;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,9 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import cn.timeoff.security.core.DomainUserDetails;
-import cn.timeoff.security.core.DomainUserDetailsImpl;
 import cn.timeoff.security.core.CurrentUser;
-import cn.timeoff.security.service.DomainUserDetailsManager;
 
 @Controller
 public interface LoginController {

@@ -2,16 +2,11 @@ package cn.timeoff.config;
 
 import java.util.ArrayList;
 
-import org.aopalliance.intercept.MethodInterceptor;
-import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDecisionManager;
-import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
@@ -23,14 +18,9 @@ import cn.timeoff.security.core.DomainDaoAuthenticationProvider;
 import cn.timeoff.security.service.DomainUserDetailsManager;
 import cn.timeoff.security.service.DomainUserDetailsManagerImpl;
 
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
-
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.AccessDecisionManager;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -38,7 +28,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.core.Ordered;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.annotation.Jsr250Voter;
-import org.springframework.security.access.expression.AbstractSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.ExpressionBasedPreInvocationAdvice;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
@@ -47,7 +36,6 @@ import org.springframework.security.access.prepost.PreInvocationAuthorizationAdv
 import org.springframework.security.access.vote.AffirmativeBased;
 import org.springframework.security.access.vote.AuthenticatedVoter;
 import org.springframework.security.access.vote.RoleHierarchyVoter;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.util.Assert;
 
 @Configuration

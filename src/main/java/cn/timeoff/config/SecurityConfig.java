@@ -1,38 +1,20 @@
 package cn.timeoff.config;
 
-import org.aopalliance.intercept.MethodInterceptor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.expression.AbstractSecurityExpressionHandler;
 import org.springframework.security.access.expression.SecurityExpressionHandler;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
-import org.springframework.security.access.vote.RoleHierarchyVoter;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 
 import cn.timeoff.config.hackspring.HttpSecurity;
 import cn.timeoff.config.hackspring.WebSecurityConfigurerAdapter;
-import cn.timeoff.security.core.DomainDaoAuthenticationProvider;
-import cn.timeoff.security.service.DomainUserDetailsManager;
-import cn.timeoff.security.service.DomainUserDetailsManagerImpl;
 
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 
