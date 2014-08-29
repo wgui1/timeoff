@@ -12,7 +12,6 @@ import cn.timeoff.security.core.CurrentUser;
 @Controller
 public interface LoginController {
 
-    
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     String getLoginPage(Model model);
 
@@ -26,7 +25,7 @@ public interface LoginController {
 
     @RequestMapping(value="/register", method=RequestMethod.GET)
     String new_form();
-    
+
     @RequestMapping(value="/register", method=RequestMethod.POST)
     String createCooperation(@RequestParam("cooperation") String domainName,
                          @RequestParam("username") String username,
