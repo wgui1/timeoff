@@ -10,28 +10,14 @@ import javax.persistence.ManyToOne;
 import cn.timeoff.security.model.Domain;
 
 @Entity
-public class Organization {
+public class Filter {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
 
-    private String name;
-
-	@ManyToOne
-    @JoinColumn(name="cooperation_id")
-    private Domain cooperation;
-
-	public Organization() {
-		super();
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+    @ManyToOne
+    @JoinColumn(name="domain_id")
+    private Domain domain;
 
 }

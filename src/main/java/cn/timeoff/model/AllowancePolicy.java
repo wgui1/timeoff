@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 import cn.timeoff.security.model.Domain;
 
 @Entity
-public class TimeoffPolicy {
+public class AllowancePolicy {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -28,7 +28,7 @@ public class TimeoffPolicy {
     private int accrual_cycle;
     private int max;
 
-	public TimeoffPolicy() {
+	public AllowancePolicy() {
 		super();
 	}
 
