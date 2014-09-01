@@ -20,10 +20,6 @@ public class TimeoffPolicy {
     @JoinColumn(name="domain_id")
     private Domain domain;
     
-    @ManyToOne
-    @JoinColumn(name="filter_id")
-    private Filter filter;
-
     private int accrual;
     private int accrual_cycle;
     private int max;

@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 import cn.timeoff.security.model.Domain;
 
 @Entity
-public class Filter {
+public class TimeoffSetting {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -19,5 +19,19 @@ public class Filter {
     @ManyToOne
     @JoinColumn(name="domain_id")
     private Domain domain;
+
+    private String name;
+
+	public TimeoffSetting() {
+		super();
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 }
