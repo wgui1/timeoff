@@ -1,21 +1,28 @@
 package cn.timeoff.model;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-
-import cn.timeoff.security.model.Domain;
 
 @Entity
-public class Cooperation {
+public class DateCalculation {
+
+    public enum YearCutoffTime {
+    	Formal,
+    	Calendar,
+    	FromOnboard, 
+    }
+
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
+    
 
-    @OneToOne
-    @JoinColumn(name="domain_id")
-    private Domain domain;
+    private YearCutoffTime year_cutoff;
+
+    private Timestamp datetime;
+
 }

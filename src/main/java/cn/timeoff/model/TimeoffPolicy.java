@@ -5,9 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
-
-import cn.timeoff.security.model.Domain;
 
 @Entity
 public class TimeoffPolicy {
@@ -16,24 +15,18 @@ public class TimeoffPolicy {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
 
-    @ManyToOne
-    @JoinColumn(name="domain_id")
-    private Domain domain;
-    
-    private int accrual;
-    private int accrual_cycle;
-    private int max;
+    private int renewal;
+    private int carryover;
+    private int accural_internal;
+    private int accural_by;
+    private int accural_limit;
+    private boolean active;
+    private boolean balance_required;
+    private boolean auto_approval;
+    private boolean request_eanbled;
 
 	public TimeoffPolicy() {
 		super();
-	}
-
-	public Domain getDomain() {
-		return domain;
-	}
-
-	public void setName(Domain domain) {
-		this.domain = domain;
 	}
 
 }
