@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import cn.timeoff.security.core.DomainDaoAuthenticationProvider;
+import cn.timeoff.security.core.SpringSecurityAuditorAware;
 import cn.timeoff.security.service.DomainUserDetailsManager;
 import cn.timeoff.security.service.DomainUserDetailsManagerImpl;
 
@@ -26,6 +27,8 @@ import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.Ordered;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.annotation.Jsr250Voter;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
@@ -41,12 +44,18 @@ import org.springframework.util.Assert;
 @Configuration
 @EnableWebSecurity
 @EnableWebMvcSecurity
+@EnableJpaAuditing
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CustomGlobalMethodSecurityConfiguration extends
         GlobalMethodSecurityConfiguration {
 	
     private AnnotationAttributes enableMethodSecurity;
+
+    @Bean
+    public AuditorAware<String> auditorProvider() {
+        return new SpringSecurityAuditorAware();
+    }
 
     @Bean
     public DomainUserDetailsManager domainUserDetailsManager() {

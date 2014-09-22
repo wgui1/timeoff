@@ -1,5 +1,7 @@
 package cn.timeoff.model;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,6 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 public class Organization {
@@ -20,12 +25,18 @@ public class Organization {
 
     @ManyToOne
     @JoinColumn(name="organization_id")
-    private Organization upper_level;
+    private Organization upperLevel;
 
     @OneToOne(mappedBy="organization")
-    private TimeoffSetting timeoff_setting;
+    private TimeoffSetting timeoffSetting;
 
     private String name;
+
+    @LastModifiedBy
+    private String modifiedBy;
+
+    @LastModifiedDate
+    private Timestamp lastModifiedTime;
 
 	public String getName() {
 		return name;
@@ -34,4 +45,37 @@ public class Organization {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public Cooperation getCooperation() {
+		return cooperation;
+	}
+
+	public void setCooperation(Cooperation cooperation) {
+		this.cooperation = cooperation;
+	}
+
+	public Organization getUpperLevel() {
+		return upperLevel;
+	}
+
+	public void setUpperLevel(Organization upperLevel) {
+		this.upperLevel = upperLevel;
+	}
+
+	public TimeoffSetting getTimeoffSetting() {
+		return timeoffSetting;
+	}
+
+	public void setTimeoffSetting(TimeoffSetting timeoffSetting) {
+		this.timeoffSetting = timeoffSetting;
+	}
+
 }
