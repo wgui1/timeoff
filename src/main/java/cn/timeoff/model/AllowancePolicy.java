@@ -18,12 +18,15 @@ import org.springframework.data.annotation.CreatedDate;
 import cn.timeoff.security.model.Domain;
 
 @Entity
-@Immutable
 public class AllowancePolicy {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
+
+    @ManyToOne
+    @JoinColumn(name="timeoff_setting_id")
+    private TimeoffSetting timeoffSetting;
 
     private int accrual;
     private int accrualCycle;

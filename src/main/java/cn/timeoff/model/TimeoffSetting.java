@@ -27,32 +27,23 @@ public class TimeoffSetting {
     @JoinColumn(name="cooperation_id")
     private Organization organization;
 
-    @OneToMany
-    @JoinTable(
-            name="setting_policy",
-            joinColumns = @JoinColumn(name = "timeoffsetting_id"),
-            inverseJoinColumns = @JoinColumn(name = "timeoffpolicy_id")
-    )
+    @OneToMany(mappedBy="timeoffSetting")
     private List<TimeoffPolicy> timeoffPolicies = new ArrayList<TimeoffPolicy>();
-    
+
+    @OneToOne
     private TimeoffPolicy timeoffPolicy;
     
-    @OneToMany
-    @JoinTable(
-            name="setting_allowance",
-            joinColumns = @JoinColumn(name = "timeoffsetting_id"),
-            inverseJoinColumns = @JoinColumn(name = "timeoffallowance_id")
-    )
-    private List<AllowancePolicy> allowancePolicies;
+    @OneToMany(mappedBy="timeoffSetting")
+    private List<AllowancePolicy> allowancePolicies = new ArrayList<AllowancePolicy>();
 
-    @OneToMany
-    @JoinTable(
-            name="setting_partialyear",
-            joinColumns = @JoinColumn(name = "timeoffsetting_id"),
-            inverseJoinColumns = @JoinColumn(name = "partialyearrate_id")
-    )
+    @OneToOne
+    private AllowancePolicy allowancePolicy;
 
-    private List<PartialYearRate> partialYearRates;
+    @OneToMany(mappedBy="timeoffSetting")
+    private List<PartialYearRate> partialYearRates = new ArrayList<PartialYearRate>();
+
+    @OneToOne
+    private PartialYearRate partialYearRate;
     
     @LastModifiedBy
     private String lastModifiedBy;
@@ -108,14 +99,6 @@ public class TimeoffSetting {
         this.allowancePolicies = allowancePolicies;
     }
     
-    public AllowancePolicy getAllowancePolicy getAllowancePolicy() {
-    	if (allowancePolicies == null || allowancePolicies.isEmpty()) {
-    		return null;
-    	}
-    	allowancePolicies
-    	
-    }
-
     public List<PartialYearRate> getPartialYearRates() {
         return partialYearRates;
     }
