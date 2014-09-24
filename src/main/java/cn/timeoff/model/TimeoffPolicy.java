@@ -123,4 +123,28 @@ public class TimeoffPolicy {
         this.requestEanbled = requestEanbled;
     }
 
+	public TimeoffSetting getTimeoffSetting() {
+		return timeoffSetting;
+	}
+
+	public void setTimeoffSetting(TimeoffSetting timeoffSetting) {
+		this.timeoffSetting = timeoffSetting;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Timestamp getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Timestamp createdDate) {
+		this.createdDate = createdDate;
+	}
+
 }

@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -113,6 +112,46 @@ public class TimeoffSetting {
 
     public void setCutoffDate(Timestamp cutoffDate) {
         this.cutoffDate = cutoffDate;
+    }
+
+    public TimeoffPolicy getTimeoffPolicy() {
+        return timeoffPolicy;
+    }
+
+    public void setTimeoffPolicy(TimeoffPolicy timeoffPolicy) {
+        this.timeoffPolicy = timeoffPolicy;
+    }
+
+    public AllowancePolicy getAllowancePolicy() {
+        return allowancePolicy;
+    }
+
+    public void setAllowancePolicy(AllowancePolicy allowancePolicy) {
+        this.allowancePolicy = allowancePolicy;
+    }
+
+    public PartialYearRate getPartialYearRate() {
+        return partialYearRate;
+    }
+
+    public void setPartialYearRate(PartialYearRate partialYearRate) {
+        this.partialYearRate = partialYearRate;
+    }
+
+    public String getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
+
+    public Timestamp getLastModifiedTime() {
+        return lastModifiedTime;
+    }
+
+    public void setLastModifiedTime(Timestamp lastModifiedTime) {
+        this.lastModifiedTime = lastModifiedTime;
     }
 
 }
