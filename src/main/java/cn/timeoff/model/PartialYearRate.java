@@ -25,7 +25,7 @@ public class PartialYearRate {
     @JoinColumn(name="timeoff_setting_id")
     private TimeoffSetting timeoffSetting;
 
-    private boolean propotional;
+    private Boolean propotional;
 
     private List<Float> ratePerMonth = new ArrayList<Float>();
 
@@ -35,11 +35,11 @@ public class PartialYearRate {
     @CreatedDate
     private Timestamp createdDate;
 
-    public boolean isPropotional() {
+    public Boolean isPropotional() {
         return propotional;
     }
 
-    public void setPropotional(boolean propotional) {
+    public void setPropotional(Boolean propotional) {
         this.propotional = propotional;
     }
 

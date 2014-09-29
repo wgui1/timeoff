@@ -28,9 +28,9 @@ public class AllowancePolicy {
     @JoinColumn(name="timeoff_setting_id")
     private TimeoffSetting timeoffSetting;
 
-    private int accrual;
-    private int accrualCycle;
-    private int max;
+    private Integer accrual;
+    private Integer accrualCycle;
+    private Integer max;
 
     @CreatedBy
     private String createdBy;
@@ -50,27 +50,27 @@ public class AllowancePolicy {
 		this.id = id;
 	}
 
-	public int getAccrual() {
+	public Integer getAccrual() {
 		return accrual;
 	}
 
-	public void setAccrual(int accrual) {
+	public void setAccrual(Integer accrual) {
 		this.accrual = accrual;
 	}
 
-	public int getMax() {
+	public Integer getMax() {
 		return max;
 	}
 
-	public void setMax(int max) {
+	public void setMax(Integer max) {
 		this.max = max;
 	}
 
-	public int getAccrualCycle() {
+	public Integer getAccrualCycle() {
 		return accrualCycle;
 	}
 
-	public void setAccrualCycle(int accrualCycle) {
+	public void setAccrualCycle(Integer accrualCycle) {
 		this.accrualCycle = accrualCycle;
 	}
 

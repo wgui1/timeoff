@@ -2,6 +2,7 @@ package cn.timeoff.model;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -16,6 +17,8 @@ import javax.persistence.OneToOne;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import cn.timeoff.core.NoValueSetError;
+
 @Entity
 public class TimeoffSetting {
 
@@ -28,7 +31,7 @@ public class TimeoffSetting {
     private Organization organization;
 
     @OneToMany(mappedBy="timeoffSetting")
-    private List<TimeoffPolicy> timeoffPolicies = new ArrayList<TimeoffPolicy>();
+    private Collection<TimeoffPolicy> timeoffPolicies = new ArrayList<TimeoffPolicy>();
 
     @OneToOne
     @JoinTable( name="setting_timeoffpolicy",
@@ -38,7 +41,7 @@ public class TimeoffSetting {
     private TimeoffPolicy timeoffPolicy;
 
 	@OneToMany(mappedBy="timeoffSetting")
-    private List<AllowancePolicy> allowancePolicies = new ArrayList<AllowancePolicy>();
+    private Collection<AllowancePolicy> allowancePolicies = new ArrayList<AllowancePolicy>();
 
     @OneToOne
     @JoinTable( name="setting_allowancepolicy",
@@ -48,7 +51,7 @@ public class TimeoffSetting {
     private AllowancePolicy allowancePolicy;
 
     @OneToMany(mappedBy="timeoffSetting")
-    private List<PartialYearRate> partialYearRates = new ArrayList<PartialYearRate>();
+    private Collection<PartialYearRate> partialYearRates = new ArrayList<PartialYearRate>();
 
     @OneToOne
     @JoinTable( name="setting_partialyearrate",
@@ -95,27 +98,27 @@ public class TimeoffSetting {
         this.organization = organization;
     }
 
-    public List<TimeoffPolicy> getTimeoffPolicies() {
+    public Collection<TimeoffPolicy> getTimeoffPolicies() {
         return timeoffPolicies;
     }
 
-    public void setTimeoffPolicies(List<TimeoffPolicy> timeoffPolicies) {
+    public void setTimeoffPolicies(Collection<TimeoffPolicy> timeoffPolicies) {
         this.timeoffPolicies = timeoffPolicies;
     }
 
-    public List<AllowancePolicy> getAllowancePolicies() {
+    public Collection<AllowancePolicy> getAllowancePolicies() {
         return allowancePolicies;
     }
 
-    public void setAllowancePolicies(List<AllowancePolicy> allowancePolicies) {
+    public void setAllowancePolicies(Collection<AllowancePolicy> allowancePolicies) {
         this.allowancePolicies = allowancePolicies;
     }
     
-    public List<PartialYearRate> getPartialYearRates() {
+    public Collection<PartialYearRate> getPartialYearRates() {
         return partialYearRates;
     }
 
-    public void setPartialYearRates(List<PartialYearRate> partialYearRates) {
+    public void setPartialYearRates(Collection<PartialYearRate> partialYearRates) {
         this.partialYearRates = partialYearRates;
     }
 
@@ -167,15 +170,20 @@ public class TimeoffSetting {
         this.lastModifiedTime = lastModifiedTime;
     }
     
-    public boolean isActive() {
+    public Boolean isActive() throws NoValueSetError{
+    	Boolean isActive = null;
     	if (timeoffPolicy != null) {
     		isActive = timeoffPolicy.isActive();
-    		if (isActive != null) {
-                return isActive;
-    		}
     	}
-        if (organization.getUpperLevel() != null)
-    	}
+        if (isActive == null) {
+            Organization upperLevel = organization.getUpperLevel();
+            if (upperLevel != null) {
+                isActive = upperLevel.getTimeoffSetting().isActive();
+            } else {
+                throw new NoValueSetError("Value 'isActive' is not set");
+            }
+        }
+        return isActive;
 	}
 
 	public int getRenewal() {

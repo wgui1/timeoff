@@ -29,15 +29,15 @@ public class TimeoffPolicy {
     @CreatedDate
     private Timestamp createdDate;
 
-    private int renewal;
-    private int carryOver;
-    private int accuralInterval;
-    private int accuralBy;
-    private int accuralLimit;
-    private boolean active;
-    private boolean balanceRequired;
-    private boolean autoApproval;
-    private boolean requestEanbled;
+    private Integer renewal;
+    private Integer carryOver;
+    private Integer accuralInterval;
+    private Integer accuralBy;
+    private Integer accuralLimit;
+    private Boolean active;
+    private Boolean balanceRequired;
+    private Boolean autoApproval;
+    private Boolean requestEanbled;
 
     public TimeoffPolicy() {
         super();
@@ -51,75 +51,75 @@ public class TimeoffPolicy {
         this.id = id;
     }
 
-    public boolean isActive() {
+    public Boolean isActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 
-    public int getRenewal() {
+    public Integer getRenewal() {
         return renewal;
     }
 
-    public void setRenewal(int renewal) {
+    public void setRenewal(Integer renewal) {
         this.renewal = renewal;
     }
 
-    public int getCarryOver() {
+    public Integer getCarryOver() {
         return carryOver;
     }
 
-    public void setCarryOver(int carryOver) {
+    public void setCarryOver(Integer carryOver) {
         this.carryOver = carryOver;
     }
 
-    public int getAccuralInterval() {
+    public Integer getAccuralInterval() {
         return accuralInterval;
     }
 
-    public void setAccuralInterval(int accuralInterval) {
+    public void setAccuralInterval(Integer accuralInterval) {
         this.accuralInterval = accuralInterval;
     }
 
-    public int getAccuralBy() {
+    public Integer getAccuralBy() {
         return accuralBy;
     }
 
-    public void setAccuralBy(int accuralBy) {
+    public void setAccuralBy(Integer accuralBy) {
         this.accuralBy = accuralBy;
     }
 
-    public int getAccuralLimit() {
+    public Integer getAccuralLimit() {
         return accuralLimit;
     }
 
-    public void setAccuralLimit(int accuralLimit) {
+    public void setAccuralLimit(Integer accuralLimit) {
         this.accuralLimit = accuralLimit;
     }
 
-    public boolean isBalanceRequired() {
+    public Boolean isBalanceRequired() {
         return balanceRequired;
     }
 
-    public void setBalanceRequired(boolean balanceRequired) {
+    public void setBalanceRequired(Boolean balanceRequired) {
         this.balanceRequired = balanceRequired;
     }
 
-    public boolean isAutoApproval() {
+    public Boolean isAutoApproval() {
         return autoApproval;
     }
 
-    public void setAutoApproval(boolean autoApproval) {
+    public void setAutoApproval(Boolean autoApproval) {
         this.autoApproval = autoApproval;
     }
 
-    public boolean isRequestEanbled() {
+    public Boolean isRequestEanbled() {
         return requestEanbled;
     }
 
-    public void setRequestEanbled(boolean requestEanbled) {
+    public void setRequestEanbled(Boolean requestEanbled) {
         this.requestEanbled = requestEanbled;
     }
 

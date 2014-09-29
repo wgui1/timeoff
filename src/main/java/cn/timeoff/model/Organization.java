@@ -1,6 +1,8 @@
 package cn.timeoff.model;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import org.springframework.data.annotation.LastModifiedBy;
@@ -23,9 +26,13 @@ public class Organization {
     @JoinColumn(name="cooperation_id")
     private Cooperation cooperation;
 
-    @ManyToOne
-    @JoinColumn(name="organization_id")
+    @ManyToOne(optional=true)
+    @JoinColumn(name="organization_id", nullable=true)
     private Organization upperLevel;
+    
+    @OneToMany(mappedBy="upperLevel")
+    private Collection<Organization> subOrganizations = new ArrayList<Organization>();
+    
 
     @OneToOne(mappedBy="organization")
     private TimeoffSetting timeoffSetting;
