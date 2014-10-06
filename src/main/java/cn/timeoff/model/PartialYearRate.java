@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -27,9 +29,12 @@ public class PartialYearRate {
 
     private Boolean propotional;
 
-    private List<Float> ratePerMonth = new ArrayList<Float>();
+    @OneToMany
+    @OrderColumn(name = "month")
+    private List<PartialMonthRate> partialMonthRates =
+                        new ArrayList<PartialMonthRate>();
 
-    @CreatedBy
+	@CreatedBy
     private String createdBy;
 
     @CreatedDate
@@ -43,44 +48,44 @@ public class PartialYearRate {
         this.propotional = propotional;
     }
 
-    public List<Float> getRatePerMonth() {
-        return ratePerMonth;
+    public long getId() {
+        return id;
     }
 
-    public void setRatePerMonth(List<Float> ratePerMonth) {
-        this.ratePerMonth = ratePerMonth;
+    public void setId(long id) {
+        this.id = id;
     }
 
-	public long getId() {
-		return id;
+    public TimeoffSetting getTimeoffSetting() {
+        return timeoffSetting;
+    }
+
+    public void setTimeoffSetting(TimeoffSetting timeoffSetting) {
+        this.timeoffSetting = timeoffSetting;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Timestamp getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Timestamp createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public List<PartialMonthRate> getPartialMonthRates() {
+		return partialMonthRates;
 	}
 
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public TimeoffSetting getTimeoffSetting() {
-		return timeoffSetting;
-	}
-
-	public void setTimeoffSetting(TimeoffSetting timeoffSetting) {
-		this.timeoffSetting = timeoffSetting;
-	}
-
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public Timestamp getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(Timestamp createdDate) {
-		this.createdDate = createdDate;
+	public void setPartialMonthRates(List<PartialMonthRate> partialMonthRates) {
+		this.partialMonthRates = partialMonthRates;
 	}
 
 }

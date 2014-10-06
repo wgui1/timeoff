@@ -1,21 +1,16 @@
 package cn.timeoff.model;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 
-import org.hibernate.annotations.Immutable;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
-
-import cn.timeoff.security.model.Domain;
 
 @Entity
 public class AllowancePolicy {

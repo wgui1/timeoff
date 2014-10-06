@@ -1,4 +1,4 @@
-package cn.timeoff.repository;
+package cn.timeoff.security.repository;
 
 import java.util.List;
 
@@ -17,12 +17,6 @@ import cn.timeoff.security.model.Group;
 import cn.timeoff.security.model.GroupAuthority;
 import cn.timeoff.security.model.GroupMember;
 import cn.timeoff.security.model.User;
-import cn.timeoff.security.repository.AuthorityRepository;
-import cn.timeoff.security.repository.DomainRepository;
-import cn.timeoff.security.repository.GroupAuthorityRepository;
-import cn.timeoff.security.repository.GroupMemberRepository;
-import cn.timeoff.security.repository.GroupRepository;
-import cn.timeoff.security.repository.UserRepository;
 
 @SpringApplicationConfiguration(classes = {cn.timeoff.Application.class})
 @RunWith(SpringJUnit4ClassRunner.class)

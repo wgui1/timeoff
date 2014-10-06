@@ -391,20 +391,20 @@ public class TimeoffSetting {
         return isPropotional;
 	}
 
-	public List<Float> getRatePerMonth()  throws NoValueSetError{
-    	List<Float> ratePerMonth = null;
+	public List<PartialMonthRate> getPartialMonthRates()  throws NoValueSetError{
+    	List<PartialMonthRate> partialMonthRates = null;
     	if (partialYearRate != null) {
-    		ratePerMonth = partialYearRate.getRatePerMonth();
+    		partialMonthRates = partialYearRate.getPartialMonthRates();
     	}
-        if (ratePerMonth == null) {
+        if (partialMonthRates == null) {
             Organization upperLevel = organization.getUpperLevel();
             if (upperLevel != null) {
-                ratePerMonth = upperLevel.getTimeoffSetting().getRatePerMonth();
+                partialMonthRates = upperLevel.getTimeoffSetting().getPartialMonthRates();
             }
-            if ( ratePerMonth == null) {
-                throw new NoValueSetError("Value 'ratePerMonth' is not set");
+            if ( partialMonthRates == null) {
+                throw new NoValueSetError("Value 'partialMonthRates' is not set");
             }
         }
-        return ratePerMonth;
+        return partialMonthRates;
 	}
 }
