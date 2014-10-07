@@ -2,6 +2,8 @@ package cn.timeoff.security.repository;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +24,7 @@ import cn.timeoff.security.model.User;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ActiveProfiles("dev")
+@Transactional
 public class RepositoryTest {
     
     @Autowired
@@ -40,23 +43,17 @@ public class RepositoryTest {
     private AuthorityRepository authorityRepository;
 
     @Autowired
-    private DomainRepository cooperationRepository;
+    private DomainRepository domainRepository;
 
     @Before
     public void cleanDB() {
-        groupAuthorityRepository.deleteAll();
-        groupMemberRepository.deleteAll();
-        groupRepository.deleteAll();
-        authorityRepository.deleteAll();
-        userRepository.deleteAll();
-        cooperationRepository.deleteAll();
     }
 
     @Test
     public void basicUser() {
         Domain domain = new Domain();
         domain.setName("Timeoff");
-        domain = cooperationRepository.save(domain);
+        domain = domainRepository.save(domain);
 
         // save a couple of customers
         User user_jack = new User(domain, "Jack", "jack@24.com", "");
@@ -71,7 +68,7 @@ public class RepositoryTest {
     public void basicAuthority() {
         Domain domain = new Domain();
         domain.setName("Timeoff");
-        domain = cooperationRepository.save(domain);
+        domain = domainRepository.save(domain);
 
         // save a couple of customers
         User user_jack = new User(domain, "Jack", "jack@24.com", "");
@@ -92,7 +89,7 @@ public class RepositoryTest {
         
         Domain domain = new Domain();
         domain.setName("Timeoff");
-        cooperationRepository.save(domain);
+        domainRepository.save(domain);
         
         Group user_group = new Group();
         user_group.setDomain(domain);
@@ -119,7 +116,7 @@ public class RepositoryTest {
         
         Domain domain = new Domain();
         domain.setName("Timeoff");
-        cooperationRepository.save(domain);
+        domainRepository.save(domain);
         
         User jack = new User(domain, "Jack", "jack@24.com", "");
         jack.setPassword("jack");
@@ -152,7 +149,7 @@ public class RepositoryTest {
         
         Domain domain = new Domain();
         domain.setName("Timeoff");
-        cooperationRepository.save(domain);
+        domainRepository.save(domain);
         
         User jack = new User(domain, "Jack", "jack@24.com", "");
         jack.setPassword("jack");

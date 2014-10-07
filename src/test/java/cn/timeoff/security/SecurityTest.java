@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,6 +38,7 @@ import cn.timeoff.security.service.DomainUserDetailsManager;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ActiveProfiles("dev")
+@Transactional
 public class  SecurityTest{
 
 	@Autowired
@@ -61,12 +64,6 @@ public class  SecurityTest{
 
 	@Before
 	public void setUp() throws Exception {
-		groupAuthorityRepository.deleteAll();
-		groupMemberRepository.deleteAll();
-		groupRepository.deleteAll();
-		authorityRepository.deleteAll();
-		userRepository.deleteAll();
-		domainRepository.deleteAll();
 	}
 
 	@Test

@@ -68,19 +68,14 @@ public class TimeoffSetting {
 
     private Timestamp cutoffDate;
 
-    private String name;
-
     public TimeoffSetting() {
         super();
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    public TimeoffSetting(Organization organization) {
+		super();
+		this.organization = organization;
+	}
 
     public long getId() {
         return id;

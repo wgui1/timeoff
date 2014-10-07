@@ -23,10 +23,6 @@ public class Employee {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="cooperation_id")
-    private Cooperation cooperation;
-
-    @ManyToOne
     @JoinColumn(name="organization_id")
     private Organization organization;
     
@@ -40,12 +36,14 @@ public class Employee {
     @LastModifiedDate
     private Timestamp lastModifiedTime;
 
-	public Cooperation getCooperation() {
-		return cooperation;
+	public Employee() {
+		super();
 	}
 
-	public void setCooperation(Cooperation cooperation) {
-		this.cooperation = cooperation;
+	public Employee(Organization organization, User user) {
+		super();
+		this.organization = organization;
+		this.user = user;
 	}
 
 	public Organization getOrganization() {

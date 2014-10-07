@@ -45,6 +45,21 @@ public class Organization {
     @LastModifiedDate
     private Timestamp lastModifiedTime;
 
+	public Organization() {
+		super();
+	}
+
+	public Organization(Cooperation cooperation) {
+		super();
+		this.cooperation = cooperation;
+	}
+
+	public Organization(Cooperation cooperation, Organization upperLevel) {
+		super();
+		this.cooperation = cooperation;
+		this.upperLevel = upperLevel;
+	}
+
 	public String getName() {
 		return name;
 	}

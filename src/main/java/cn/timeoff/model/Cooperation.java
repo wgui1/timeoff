@@ -30,6 +30,15 @@ public class Cooperation {
     @LastModifiedDate
     private Timestamp lastModifiedTime;
 
+	public Cooperation() {
+		super();
+	}
+
+	public Cooperation(Domain domain) {
+		super();
+		this.domain = domain;
+	}
+
 	public long getId() {
 		return id;
 	}
