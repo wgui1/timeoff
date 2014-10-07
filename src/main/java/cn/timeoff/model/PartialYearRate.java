@@ -40,12 +40,45 @@ public class PartialYearRate {
     @CreatedDate
     private Timestamp createdDate;
 
-    public Boolean isPropotional() {
+    public PartialYearRate() {
+		super();
+		propotional = false;
+	}
+
+	public PartialYearRate(List<PartialMonthRate> partialMonthRates) {
+		super();
+		this.propotional = false;
+		this.partialMonthRates = partialMonthRates;
+	}
+	
+	public PartialYearRate(Boolean propotional) {
+		super();
+		this.propotional = propotional;
+		if(propotional) {
+			this.partialMonthRates = createPropotionalMonthRates();
+		}
+	}
+
+	private List<PartialMonthRate> createPropotionalMonthRates() {
+		float theMonthRate;
+		double oneMonthRate = 1.0/12;
+		ArrayList<PartialMonthRate> partialMonthRates = new ArrayList<PartialMonthRate>();
+		for(int i=1; i<13; i++) {
+			theMonthRate = (float) oneMonthRate * (12-1);
+			partialMonthRates.add(new PartialMonthRate(i, theMonthRate));
+		}
+		return partialMonthRates;
+	}
+
+	public Boolean isPropotional() {
         return propotional;
     }
 
     public void setPropotional(Boolean propotional) {
         this.propotional = propotional;
+		if(propotional) {
+			this.partialMonthRates = createPropotionalMonthRates();
+		}
     }
 
     public long getId() {
@@ -86,6 +119,10 @@ public class PartialYearRate {
 
 	public void setPartialMonthRates(List<PartialMonthRate> partialMonthRates) {
 		this.partialMonthRates = partialMonthRates;
+	}
+
+	public Boolean getPropotional() {
+		return propotional;
 	}
 
 }

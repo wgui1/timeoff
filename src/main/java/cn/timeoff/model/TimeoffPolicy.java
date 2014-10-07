@@ -19,7 +19,7 @@ public class TimeoffPolicy {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
     
-    @ManyToOne
+    @ManyToOne(optional=false)
     @JoinColumn(name="timeoff_setting_id")
     private TimeoffSetting timeoffSetting;
 

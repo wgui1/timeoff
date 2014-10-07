@@ -26,7 +26,7 @@ public class TimeoffSetting {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
 
-    @OneToOne
+    @OneToOne(optional=false)
     @JoinColumn(name="cooperation_id")
     private Organization organization;
 
@@ -43,7 +43,7 @@ public class TimeoffSetting {
 	@OneToMany(mappedBy="timeoffSetting")
     private Collection<AllowancePolicy> allowancePolicies = new ArrayList<AllowancePolicy>();
 
-    @OneToOne
+    @OneToOne(optional=false)
     @JoinTable( name="setting_allowancepolicy",
                 joinColumns = @JoinColumn(name = "timeoff_setting_id"),
                 inverseJoinColumns = @JoinColumn(name = "allowance_policy_id")
@@ -53,7 +53,7 @@ public class TimeoffSetting {
     @OneToMany(mappedBy="timeoffSetting")
     private Collection<PartialYearRate> partialYearRates = new ArrayList<PartialYearRate>();
 
-    @OneToOne
+    @OneToOne(optional=false)
     @JoinTable( name="setting_partialyearrate",
                 joinColumns = @JoinColumn(name = "timeoff_setting_id"),
                 inverseJoinColumns = @JoinColumn(name = "partial_year_rate_id")
