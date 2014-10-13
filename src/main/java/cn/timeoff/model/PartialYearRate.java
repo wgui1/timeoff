@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,7 +30,7 @@ public class PartialYearRate {
 
     private Boolean propotional;
 
-    @OneToMany
+    @OneToMany(cascade=CascadeType.ALL)
     @OrderColumn(name = "month")
     private List<PartialMonthRate> partialMonthRates =
                         new ArrayList<PartialMonthRate>();
@@ -65,7 +66,7 @@ public class PartialYearRate {
 		ArrayList<PartialMonthRate> partialMonthRates = new ArrayList<PartialMonthRate>();
 		for(int i=1; i<13; i++) {
 			theMonthRate = (float) oneMonthRate * (12-1);
-			partialMonthRates.add(new PartialMonthRate(i, theMonthRate));
+			partialMonthRates.add(new PartialMonthRate(this, i, theMonthRate));
 		}
 		return partialMonthRates;
 	}
@@ -118,6 +119,8 @@ public class PartialYearRate {
 	}
 
 	public void setPartialMonthRates(List<PartialMonthRate> partialMonthRates) {
+		assert partialMonthRates.size() == 12;
+		this.propotional = false;
 		this.partialMonthRates = partialMonthRates;
 	}
 

@@ -37,6 +37,11 @@ public class AllowancePolicy {
         super();
     }
 
+	public AllowancePolicy(TimeoffSetting timeoffSetting) {
+		super();
+		this.timeoffSetting = timeoffSetting;
+	}
+
 	public long getId() {
 		return id;
 	}
