@@ -37,9 +37,13 @@ public class AllowancePolicy {
         super();
     }
 
-	public AllowancePolicy(TimeoffSetting timeoffSetting) {
+	public AllowancePolicy(TimeoffSetting timeoffSetting, Integer accrual,
+			Integer accrualCycle, Integer max) {
 		super();
 		this.timeoffSetting = timeoffSetting;
+		this.accrual = accrual;
+		this.accrualCycle = accrualCycle;
+		this.max = max;
 	}
 
 	public long getId() {
