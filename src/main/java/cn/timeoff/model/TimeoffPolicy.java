@@ -43,7 +43,24 @@ public class TimeoffPolicy {
         super();
     }
 
-    public long getId() {
+    public TimeoffPolicy(TimeoffSetting timeoffSetting, Integer renewal,
+			Integer carryOver, Integer accuralInterval, Integer accuralBy,
+			Integer accuralLimit, Boolean active, Boolean balanceRequired,
+			Boolean autoApproval, Boolean requestEanbled) {
+		super();
+		this.timeoffSetting = timeoffSetting;
+		this.renewal = renewal;
+		this.carryOver = carryOver;
+		this.accuralInterval = accuralInterval;
+		this.accuralBy = accuralBy;
+		this.accuralLimit = accuralLimit;
+		this.active = active;
+		this.balanceRequired = balanceRequired;
+		this.autoApproval = autoApproval;
+		this.requestEanbled = requestEanbled;
+	}
+
+	public long getId() {
         return id;
     }
 
