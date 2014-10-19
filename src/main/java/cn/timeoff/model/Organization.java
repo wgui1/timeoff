@@ -16,6 +16,8 @@ import javax.persistence.OneToOne;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import cn.timeoff.core.NoValueSetError;
+
 @Entity
 public class Organization {
     @Id
@@ -101,6 +103,17 @@ public class Organization {
 
     public void setTimeoffSetting(TimeoffSetting timeoffSetting) {
         this.timeoffSetting = timeoffSetting;
+    }
+    
+    public TimeoffSetting getTimeoffSettingRecursive() throws NoValueSetError{
+    	TimeoffSetting s = getTimeoffSetting();
+    	if (s == null && !isTopLevel()) {
+    		s = getUpperLevel().getTimeoffSettingRecursive();
+    	}
+    	if (s == null) {
+    		throw new NoValueSetError("No timeoff setting found");
+    	}
+    	return s;
     }
 
 	public Collection<Organization> getSubOrganizations() {

@@ -14,8 +14,8 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Propagation;
 
+import cn.timeoff.core.NoValueSetError;
 import cn.timeoff.model.Cooperation;
 import cn.timeoff.model.Employee;
 import cn.timeoff.model.Organization;
@@ -33,6 +33,7 @@ import cn.timeoff.security.repository.UserRepository;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ActiveProfiles("dev")
+@Transactional
 public class RepositoryTest {
 
     @Autowired
@@ -85,7 +86,6 @@ public class RepositoryTest {
     }
 
     @Test
-    @Transactional
     public void organization() {
         Organization organization_it = new Organization(cooperation, "IT");
         organization_it.setUpperLevel(organizationTop);
@@ -99,7 +99,6 @@ public class RepositoryTest {
         organization_unix.setUpperLevel(organization_it);
         organization_unix = organizationRepository.save(organization_unix);
         
-        //entityManager.flush();
         boolean hasIt = false;
         boolean hasHr = false;
         Iterable<Organization> organizations = organizationRepository.findAll();
@@ -128,7 +127,6 @@ public class RepositoryTest {
     }
 
     @Test
-    @Transactional
     public void basicEmployee() {
         // save two employees
         User user_jack = new User(domain, "Jack", "jack@24.com", "");
@@ -144,7 +142,6 @@ public class RepositoryTest {
     }
     
     @Test
-    @Transactional
     public void partialYearRateTest() {
         PartialYearRate partialYearRate = new PartialYearRate(true);
         partialYearRate = partialYearRateRepository.save(partialYearRate);
@@ -176,7 +173,6 @@ public class RepositoryTest {
     }
     
     @Test
-    @Transactional
     public void timeoffSetting() {
         TimeoffSetting timeoffSetting = new TimeoffSetting(organizationTop);
         timeoffSetting = timeoffSettingRepository.save(timeoffSetting);
@@ -185,7 +181,6 @@ public class RepositoryTest {
     }
 
     @Test
-    @Transactional
     public void AllowancePolicy() {
         TimeoffSetting timeoffSetting = new TimeoffSetting(organizationTop);
         timeoffSetting = timeoffSettingRepository.save(timeoffSetting);
@@ -201,7 +196,6 @@ public class RepositoryTest {
     }
 
     @Test
-    @Transactional
     public void TimeoffPolicy() {
         TimeoffSetting timeoffSetting = new TimeoffSetting(organizationTop);
         timeoffSetting = timeoffSettingRepository.save(timeoffSetting);
@@ -218,21 +212,40 @@ public class RepositoryTest {
         org.junit.Assert.assertEquals(1, timeoffPolicy.getRenewal().intValue());
     }
 
-    @Test
-    @Transactional
-    public void chainSetting() {
+    @Test(expected=NoValueSetError.class)
+    public void chainSetting() throws NoValueSetError {
+        Organization organization_it = new Organization(cooperation, "IT");
+        organization_it.setUpperLevel(organizationTop);
+        organization_it = organizationRepository.save(organization_it);
+
+        Organization organization_hr = new Organization(cooperation, "HR");
+        organization_hr.setUpperLevel(organizationTop);
+        organization_hr = organizationRepository.save(organization_hr);
+
+        Organization organization_unix = new Organization(cooperation, "UNIX");
+        organization_unix.setUpperLevel(organization_it);
+        organization_unix = organizationRepository.save(organization_unix);
+
         TimeoffSetting timeoffSetting = new TimeoffSetting(organizationTop);
         timeoffSetting = timeoffSettingRepository.save(timeoffSetting);
 
     	TimeoffPolicy timeoffPolicy = new TimeoffPolicy(timeoffSetting,
                                 1, 1, 1, 1, 10, true, true, false, true);
     	timeoffPolicy = timeoffPolicyRepository.save(timeoffPolicy);
-    	Iterable<TimeoffPolicy> timeoffPolicies = timeoffPolicyRepository.findAll();
-    	timeoffPolicy = timeoffPolicies.iterator().next();
-        org.junit.Assert.assertEquals(1, timeoffPolicy.getAccuralBy().intValue());
-        org.junit.Assert.assertEquals(1, timeoffPolicy.getAccuralInterval().intValue());
-        org.junit.Assert.assertEquals(10, timeoffPolicy.getAccuralLimit().intValue());
-        org.junit.Assert.assertEquals(1, timeoffPolicy.getCarryOver().intValue());
-        org.junit.Assert.assertEquals(1, timeoffPolicy.getRenewal().intValue());
+    	timeoffSetting.setTimeoffPolicy(timeoffPolicy);
+
+    	AllowancePolicy allowancePolicy = new AllowancePolicy(timeoffSetting,
+    														  1, 1, 10);
+    	allowancePolicy = allowancePolicyRepository.save(allowancePolicy);
+    	timeoffSetting.setAllowancePolicy(allowancePolicy);
+    	
+    	timeoffSetting = timeoffSettingRepository.save(timeoffSetting);
+    	
+    	entityManager.refresh(organizationTop);
+    	entityManager.refresh(organization_unix);
+    	
+        org.junit.Assert.assertNull(organization_unix.getTimeoffSetting());
+        org.junit.Assert.assertEquals(organization_unix.getTimeoffSettingRecursive().getId(),
+        							  timeoffSetting.getId());
     }
 }

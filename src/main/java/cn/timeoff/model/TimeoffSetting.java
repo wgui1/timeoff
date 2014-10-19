@@ -27,7 +27,7 @@ public class TimeoffSetting {
     private long id;
 
     @OneToOne(optional=false)
-    @JoinColumn(name="cooperation_id")
+    @JoinColumn(name="organization_id")
     private Organization organization;
 
     @OneToMany(mappedBy="timeoffSetting")
@@ -171,9 +171,9 @@ public class TimeoffSetting {
     		isActive = timeoffPolicy.isActive();
     	}
         if (isActive == null) {
-            Organization upperLevel = organization.getUpperLevel();
-            if (upperLevel != null) {
-                isActive = upperLevel.getTimeoffSetting().isActive();
+            TimeoffSetting upperSetting = organization.getUpperLevel().getTimeoffSettingRecursive();
+            if (upperSetting != null) {
+                isActive = upperSetting.isActive();
             }
             if ( isActive == null) {
                 throw new NoValueSetError("Value 'isActive' is not set");
@@ -188,9 +188,9 @@ public class TimeoffSetting {
     		renewal = timeoffPolicy.getRenewal();
     	}
         if (renewal == null) {
-            Organization upperLevel = organization.getUpperLevel();
-            if (upperLevel != null) {
-                renewal = upperLevel.getTimeoffSetting().getRenewal();
+            TimeoffSetting upperSetting = organization.getUpperLevel().getTimeoffSettingRecursive();
+            if (upperSetting != null) {
+                renewal = upperSetting.getRenewal();
             }
             if ( renewal == null) {
                 throw new NoValueSetError("Value 'renewal' is not set");
@@ -205,9 +205,9 @@ public class TimeoffSetting {
     		carryOver = timeoffPolicy.getCarryOver();
     	}
         if (carryOver == null) {
-            Organization upperLevel = organization.getUpperLevel();
-            if (upperLevel != null) {
-                carryOver = upperLevel.getTimeoffSetting().getCarryOver();
+            TimeoffSetting upperSetting = organization.getUpperLevel().getTimeoffSettingRecursive();
+            if (upperSetting != null) {
+                carryOver = upperSetting.getCarryOver();
             }
             if ( carryOver == null) {
                 throw new NoValueSetError("Value 'carryOver' is not set");
@@ -222,9 +222,9 @@ public class TimeoffSetting {
     		accuralInterval = timeoffPolicy.getAccuralInterval();
     	}
         if (accuralInterval == null) {
-            Organization upperLevel = organization.getUpperLevel();
-            if (upperLevel != null) {
-                accuralInterval = upperLevel.getTimeoffSetting().getAccuralInterval();
+            TimeoffSetting upperSetting = organization.getUpperLevel().getTimeoffSettingRecursive();
+            if (upperSetting != null) {
+                accuralInterval = upperSetting.getAccuralInterval();
             }
             if ( accuralInterval == null) {
                 throw new NoValueSetError("Value 'accuralInterval' is not set");
@@ -239,9 +239,9 @@ public class TimeoffSetting {
     		accuralBy = timeoffPolicy.getAccuralBy();
     	}
         if (accuralBy == null) {
-            Organization upperLevel = organization.getUpperLevel();
-            if (upperLevel != null) {
-                accuralBy = upperLevel.getTimeoffSetting().getAccuralBy();
+            TimeoffSetting upperSetting = organization.getUpperLevel().getTimeoffSettingRecursive();
+            if (upperSetting != null) {
+                accuralBy = upperSetting.getAccuralBy();
             }
             if ( accuralBy == null) {
                 throw new NoValueSetError("Value 'accuralBy' is not set");
@@ -256,9 +256,9 @@ public class TimeoffSetting {
     		accuralLimit = timeoffPolicy.getAccuralLimit();
     	}
         if (accuralLimit == null) {
-            Organization upperLevel = organization.getUpperLevel();
-            if (upperLevel != null) {
-                accuralLimit = upperLevel.getTimeoffSetting().getAccuralLimit();
+            TimeoffSetting upperSetting = organization.getUpperLevel().getTimeoffSettingRecursive();
+            if (upperSetting != null) {
+                accuralLimit = upperSetting.getAccuralLimit();
             }
             if ( accuralLimit == null) {
                 throw new NoValueSetError("Value 'accuralLimit' is not set");
@@ -273,9 +273,9 @@ public class TimeoffSetting {
     		balanceRequired = timeoffPolicy.isBalanceRequired();
     	}
         if (balanceRequired == null) {
-            Organization upperLevel = organization.getUpperLevel();
-            if (upperLevel != null) {
-                balanceRequired = upperLevel.getTimeoffSetting().isBalanceRequired();
+            TimeoffSetting upperSetting = organization.getUpperLevel().getTimeoffSettingRecursive();
+            if (upperSetting != null) {
+                balanceRequired = upperSetting.isBalanceRequired();
             }
             if ( balanceRequired == null) {
                 throw new NoValueSetError("Value 'balanceRequired' is not set");
@@ -290,9 +290,9 @@ public class TimeoffSetting {
     		isAutoApproval = timeoffPolicy.isAutoApproval();
     	}
         if (isAutoApproval == null) {
-            Organization upperLevel = organization.getUpperLevel();
-            if (upperLevel != null) {
-                isAutoApproval = upperLevel.getTimeoffSetting().isAutoApproval();
+            TimeoffSetting upperSetting = organization.getUpperLevel().getTimeoffSettingRecursive();
+            if (upperSetting != null) {
+                isAutoApproval = upperSetting.isAutoApproval();
             }
             if ( isAutoApproval == null) {
                 throw new NoValueSetError("Value 'isAutoApproval' is not set");
@@ -307,9 +307,9 @@ public class TimeoffSetting {
     		isRequestEanbled = timeoffPolicy.isRequestEanbled();
     	}
         if (isRequestEanbled == null) {
-            Organization upperLevel = organization.getUpperLevel();
-            if (upperLevel != null) {
-                isRequestEanbled = upperLevel.getTimeoffSetting().isRequestEanbled();
+            TimeoffSetting upperSetting = organization.getUpperLevel().getTimeoffSettingRecursive();
+            if (upperSetting != null) {
+                isRequestEanbled = upperSetting.isRequestEanbled();
             }
             if ( isRequestEanbled == null) {
                 throw new NoValueSetError("Value 'isRequestEanbled' is not set");
@@ -324,9 +324,9 @@ public class TimeoffSetting {
     		accural = allowancePolicy.getAccrual();
     	}
         if (accural == null) {
-            Organization upperLevel = organization.getUpperLevel();
-            if (upperLevel != null) {
-                accural = upperLevel.getTimeoffSetting().getAllowanceAccrual();
+            TimeoffSetting upperSetting = organization.getUpperLevel().getTimeoffSettingRecursive();
+            if (upperSetting != null) {
+                accural = upperSetting.getAllowanceAccrual();
             }
             if ( accural == null) {
                 throw new NoValueSetError("Value 'accural' is not set");
@@ -341,9 +341,9 @@ public class TimeoffSetting {
     		max = allowancePolicy.getMax();
     	}
         if (max == null) {
-            Organization upperLevel = organization.getUpperLevel();
-            if (upperLevel != null) {
-                max = upperLevel.getTimeoffSetting().getAllowanceMax();
+            TimeoffSetting upperSetting = organization.getUpperLevel().getTimeoffSettingRecursive();
+            if (upperSetting != null) {
+                max = upperSetting.getAllowanceMax();
             }
             if ( max == null) {
                 throw new NoValueSetError("Value 'max' is not set");
@@ -358,9 +358,9 @@ public class TimeoffSetting {
     		accuralCycle = allowancePolicy.getAccrualCycle();
     	}
         if (accuralCycle == null) {
-            Organization upperLevel = organization.getUpperLevel();
-            if (upperLevel != null) {
-                accuralCycle = upperLevel.getTimeoffSetting().getAllowanceAccrualCycle();
+            TimeoffSetting upperSetting = organization.getUpperLevel().getTimeoffSettingRecursive();
+            if (upperSetting != null) {
+                accuralCycle = upperSetting.getAllowanceAccrualCycle();
             }
             if ( accuralCycle == null) {
                 throw new NoValueSetError("Value 'accuralCycle' is not set");
@@ -375,9 +375,9 @@ public class TimeoffSetting {
     		isPropotional = partialYearRate.isPropotional();
     	}
         if (isPropotional == null) {
-            Organization upperLevel = organization.getUpperLevel();
-            if (upperLevel != null) {
-                isPropotional = upperLevel.getTimeoffSetting().isPropotional();
+            TimeoffSetting upperSetting = organization.getUpperLevel().getTimeoffSettingRecursive();
+            if (upperSetting != null) {
+                isPropotional = upperSetting.isPropotional();
             }
             if ( isPropotional == null) {
                 throw new NoValueSetError("Value 'isPropotional' is not set");
@@ -392,9 +392,9 @@ public class TimeoffSetting {
     		partialMonthRates = partialYearRate.getPartialMonthRates();
     	}
         if (partialMonthRates == null) {
-            Organization upperLevel = organization.getUpperLevel();
-            if (upperLevel != null) {
-                partialMonthRates = upperLevel.getTimeoffSetting().getPartialMonthRates();
+            TimeoffSetting upperSetting = organization.getUpperLevel().getTimeoffSettingRecursive();
+            if (upperSetting != null) {
+                partialMonthRates = upperSetting.getPartialMonthRates();
             }
             if ( partialMonthRates == null) {
                 throw new NoValueSetError("Value 'partialMonthRates' is not set");
