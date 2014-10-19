@@ -38,6 +38,8 @@ public class Organization {
     private TimeoffSetting timeoffSetting;
 
     private String name;
+    
+    private boolean isTopLevel = false;
 
     @LastModifiedBy
     private String modifiedBy;
@@ -45,59 +47,85 @@ public class Organization {
     @LastModifiedDate
     private Timestamp lastModifiedTime;
 
-	public Organization() {
-		super();
+    public Organization() {
+        super();
+    }
+
+    public Organization(Cooperation cooperation, String name) {
+        super();
+        this.cooperation = cooperation;
+        this.name = name;
+    }
+
+    public Organization(Cooperation cooperation, String name, Organization upperLevel) {
+        super();
+        this.cooperation = cooperation;
+        this.upperLevel = upperLevel;
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Cooperation getCooperation() {
+        return cooperation;
+    }
+
+    public void setCooperation(Cooperation cooperation) {
+        this.cooperation = cooperation;
+    }
+
+    public Organization getUpperLevel() {
+        return upperLevel;
+    }
+
+    public void setUpperLevel(Organization upperLevel) {
+        this.upperLevel = upperLevel;
+    }
+    
+    public TimeoffSetting getTimeoffSetting() {
+        return timeoffSetting;
+    }
+
+    public void setTimeoffSetting(TimeoffSetting timeoffSetting) {
+        this.timeoffSetting = timeoffSetting;
+    }
+
+	public Collection<Organization> getSubOrganizations() {
+		return subOrganizations;
 	}
 
-	public Organization(Cooperation cooperation) {
-		super();
-		this.cooperation = cooperation;
+	public void setSubOrganizations(Collection<Organization> subOrganizations) {
+		this.subOrganizations = subOrganizations;
 	}
 
-	public Organization(Cooperation cooperation, Organization upperLevel) {
-		super();
-		this.cooperation = cooperation;
-		this.upperLevel = upperLevel;
+	public void setTopLevel(boolean isTopLevel) {
+		this.isTopLevel = isTopLevel;
 	}
 
-	public String getName() {
-		return name;
+	public boolean isTopLevel() {
+		return isTopLevel;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public String getModifiedBy() {
+		return modifiedBy;
 	}
 
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public Cooperation getCooperation() {
-		return cooperation;
-	}
-
-	public void setCooperation(Cooperation cooperation) {
-		this.cooperation = cooperation;
-	}
-
-	public Organization getUpperLevel() {
-		return upperLevel;
-	}
-
-	public void setUpperLevel(Organization upperLevel) {
-		this.upperLevel = upperLevel;
-	}
-
-	public TimeoffSetting getTimeoffSetting() {
-		return timeoffSetting;
-	}
-
-	public void setTimeoffSetting(TimeoffSetting timeoffSetting) {
-		this.timeoffSetting = timeoffSetting;
+	public Timestamp getLastModifiedTime() {
+		return lastModifiedTime;
 	}
 
 }
