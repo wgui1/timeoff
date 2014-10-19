@@ -33,7 +33,6 @@ public class Organization {
     @OneToMany(mappedBy="upperLevel")
     private Collection<Organization> subOrganizations = new ArrayList<Organization>();
     
-
     @OneToOne(mappedBy="organization")
     private TimeoffSetting timeoffSetting;
 

@@ -2,6 +2,8 @@ package cn.timeoff.repository;
 
 import java.util.ArrayList;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.junit.Before;
@@ -12,6 +14,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Propagation;
 
 import cn.timeoff.model.Cooperation;
 import cn.timeoff.model.Employee;
@@ -58,7 +61,10 @@ public class RepositoryTest {
 
     @Autowired
     private TimeoffSettingRespository timeoffSettingRepository;
-    
+
+    @PersistenceContext
+    private EntityManager entityManager;
+ 
     Domain domain;
     Cooperation cooperation;
     Organization organizationTop;
@@ -93,10 +99,12 @@ public class RepositoryTest {
         organization_unix.setUpperLevel(organization_it);
         organization_unix = organizationRepository.save(organization_unix);
         
+        //entityManager.flush();
         boolean hasIt = false;
         boolean hasHr = false;
         Iterable<Organization> organizations = organizationRepository.findAll();
         for(Organization o: organizations) {
+            entityManager.refresh(o);
         	if (o.getName() == "cooperation") {
                 org.junit.Assert.assertTrue(o.isTopLevel());
                 org.junit.Assert.assertEquals(o.getSubOrganizations().size(), 2);
