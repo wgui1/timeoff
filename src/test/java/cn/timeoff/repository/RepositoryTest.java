@@ -87,17 +87,17 @@ public class RepositoryTest {
 
     @Test
     public void organization() {
-        Organization organization_it = new Organization(cooperation, "IT");
-        organization_it.setUpperLevel(organizationTop);
-        organization_it = organizationRepository.save(organization_it);
+        Organization organizationIt = new Organization(cooperation, "IT");
+        organizationIt.setUpperLevel(organizationTop);
+        organizationIt = organizationRepository.save(organizationIt);
 
-        Organization organization_hr = new Organization(cooperation, "HR");
-        organization_hr.setUpperLevel(organizationTop);
-        organization_hr = organizationRepository.save(organization_hr);
+        Organization organizationHr = new Organization(cooperation, "HR");
+        organizationHr.setUpperLevel(organizationTop);
+        organizationHr = organizationRepository.save(organizationHr);
 
-        Organization organization_unix = new Organization(cooperation, "UNIX");
-        organization_unix.setUpperLevel(organization_it);
-        organization_unix = organizationRepository.save(organization_unix);
+        Organization organizationUnix = new Organization(cooperation, "UNIX");
+        organizationUnix.setUpperLevel(organizationIt);
+        organizationUnix = organizationRepository.save(organizationUnix);
         
         boolean hasIt = false;
         boolean hasHr = false;
@@ -212,19 +212,19 @@ public class RepositoryTest {
         org.junit.Assert.assertEquals(1, timeoffPolicy.getRenewal().intValue());
     }
 
-    @Test(expected=NoValueSetError.class)
+    @Test
     public void chainSetting() throws NoValueSetError {
-        Organization organization_it = new Organization(cooperation, "IT");
-        organization_it.setUpperLevel(organizationTop);
-        organization_it = organizationRepository.save(organization_it);
+        Organization organizationIt = new Organization(cooperation, "IT");
+        organizationIt.setUpperLevel(organizationTop);
+        organizationIt = organizationRepository.save(organizationIt);
 
-        Organization organization_hr = new Organization(cooperation, "HR");
-        organization_hr.setUpperLevel(organizationTop);
-        organization_hr = organizationRepository.save(organization_hr);
+        Organization organizationHr = new Organization(cooperation, "HR");
+        organizationHr.setUpperLevel(organizationTop);
+        organizationHr = organizationRepository.save(organizationHr);
 
-        Organization organization_unix = new Organization(cooperation, "UNIX");
-        organization_unix.setUpperLevel(organization_it);
-        organization_unix = organizationRepository.save(organization_unix);
+        Organization organizationUnix = new Organization(cooperation, "UNIX");
+        organizationUnix.setUpperLevel(organizationIt);
+        organizationUnix = organizationRepository.save(organizationUnix);
 
         TimeoffSetting timeoffSetting = new TimeoffSetting(organizationTop);
         timeoffSetting = timeoffSettingRepository.save(timeoffSetting);
@@ -242,10 +242,61 @@ public class RepositoryTest {
     	timeoffSetting = timeoffSettingRepository.save(timeoffSetting);
     	
     	entityManager.refresh(organizationTop);
-    	entityManager.refresh(organization_unix);
+    	entityManager.refresh(organizationUnix);
     	
-        org.junit.Assert.assertNull(organization_unix.getTimeoffSetting());
-        org.junit.Assert.assertEquals(organization_unix.getTimeoffSettingRecursive().getId(),
+        org.junit.Assert.assertNull(organizationUnix.getTimeoffSetting());
+        org.junit.Assert.assertEquals(organizationUnix.getTimeoffSettingRecursive().getId(),
         							  timeoffSetting.getId());
+    }
+
+    @Test
+    public void chainSetting1() throws NoValueSetError {
+        Organization organizationIt = new Organization(cooperation, "IT");
+        organizationIt.setUpperLevel(organizationTop);
+        organizationIt = organizationRepository.save(organizationIt);
+
+        Organization organizationHr = new Organization(cooperation, "HR");
+        organizationHr.setUpperLevel(organizationTop);
+        organizationHr = organizationRepository.save(organizationHr);
+
+        Organization organizationUnix = new Organization(cooperation, "UNIX");
+        organizationUnix.setUpperLevel(organizationIt);
+        organizationUnix = organizationRepository.save(organizationUnix);
+
+        TimeoffSetting timeoffSetting = new TimeoffSetting(organizationTop);
+        timeoffSetting = timeoffSettingRepository.save(timeoffSetting);
+
+    	TimeoffPolicy timeoffPolicy = new TimeoffPolicy(timeoffSetting,
+                                1, 1, 1, 1, 10, true, true, false, true);
+    	timeoffPolicy = timeoffPolicyRepository.save(timeoffPolicy);
+    	timeoffSetting.setTimeoffPolicy(timeoffPolicy);
+
+    	AllowancePolicy allowancePolicy = new AllowancePolicy(timeoffSetting,
+    														  1, 1, 10);
+    	allowancePolicy = allowancePolicyRepository.save(allowancePolicy);
+    	timeoffSetting.setAllowancePolicy(allowancePolicy);
+    	
+    	timeoffSetting = timeoffSettingRepository.save(timeoffSetting);
+
+        TimeoffSetting timeoffSettingUnix = new TimeoffSetting(organizationUnix);
+        timeoffSettingUnix = timeoffSettingRepository.save(timeoffSettingUnix);
+
+    	TimeoffPolicy timeoffPolicyUnix = new TimeoffPolicy(timeoffSettingUnix,
+                                2, 2, 2, 2, 20, true, true, false, true);
+    	timeoffPolicy = timeoffPolicyRepository.save(timeoffPolicyUnix);
+    	timeoffSettingUnix.setTimeoffPolicy(timeoffPolicyUnix);
+
+//    	AllowancePolicy allowancePolicyUnix = new AllowancePolicy(timeoffSettingUnix,
+//    														  1, 1, 10);
+//    	allowancePolicyUnix = allowancePolicyRepository.save(allowancePolicyUnix);
+//    	timeoffSetting.setAllowancePolicy(allowancePolicyUnix);
+    	
+    	timeoffSettingUnix = timeoffSettingRepository.save(timeoffSettingUnix);
+    	
+    	entityManager.refresh(organizationTop);
+    	entityManager.refresh(organizationUnix);
+
+    	timeoffSettingUnix = organizationUnix.getTimeoffSetting();
+        org.junit.Assert.assertNotEquals(timeoffSettingUnix.getId(), timeoffSetting.getId());
     }
 }
