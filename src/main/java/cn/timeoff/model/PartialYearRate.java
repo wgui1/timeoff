@@ -46,15 +46,19 @@ public class PartialYearRate {
 		propotional = false;
 	}
 
-	public PartialYearRate(List<PartialMonthRate> partialMonthRates) {
+	public PartialYearRate(TimeoffSetting timeoffSetting, 
+						   List<PartialMonthRate> partialMonthRates) {
 		super();
 		this.propotional = false;
 		this.partialMonthRates = partialMonthRates;
+		this.timeoffSetting = timeoffSetting;
 	}
 	
-	public PartialYearRate(Boolean propotional) {
+	public PartialYearRate(TimeoffSetting timeoffSetting,
+						   Boolean propotional) {
 		super();
 		this.propotional = propotional;
+		this.timeoffSetting = timeoffSetting;
 		if(propotional) {
 			this.partialMonthRates = createPropotionalMonthRates();
 		}

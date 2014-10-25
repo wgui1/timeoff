@@ -43,7 +43,7 @@ public class TimeoffSetting {
 	@OneToMany(mappedBy="timeoffSetting")
     private Collection<AllowancePolicy> allowancePolicies = new ArrayList<AllowancePolicy>();
 
-    @OneToOne(optional=false)
+    @OneToOne
     @JoinTable( name="setting_allowancepolicy",
                 joinColumns = @JoinColumn(name = "timeoff_setting_id"),
                 inverseJoinColumns = @JoinColumn(name = "allowance_policy_id")
@@ -53,7 +53,7 @@ public class TimeoffSetting {
     @OneToMany(mappedBy="timeoffSetting")
     private Collection<PartialYearRate> partialYearRates = new ArrayList<PartialYearRate>();
 
-    @OneToOne(optional=false)
+    @OneToOne
     @JoinTable( name="setting_partialyearrate",
                 joinColumns = @JoinColumn(name = "timeoff_setting_id"),
                 inverseJoinColumns = @JoinColumn(name = "partial_year_rate_id")
@@ -66,7 +66,8 @@ public class TimeoffSetting {
     @LastModifiedDate
     private Timestamp lastModifiedTime;
 
-    private Timestamp cutoffDate;
+    private Integer cutoffMonth;
+    private Integer cutoffDay;
 
     public TimeoffSetting() {
         super();
@@ -75,9 +76,19 @@ public class TimeoffSetting {
     public TimeoffSetting(Organization organization) {
 		super();
 		this.organization = organization;
+		this.setCutoffMonth(1);
+		this.setCutoffDay(1);
 	}
 
-    public long getId() {
+    public TimeoffSetting(Organization organization, Integer cutoffMonth,
+			Integer cutoffDay) {
+		super();
+		this.organization = organization;
+		this.cutoffMonth = cutoffMonth;
+		this.cutoffDay = cutoffDay;
+	}
+
+	public long getId() {
         return id;
     }
 
@@ -115,14 +126,6 @@ public class TimeoffSetting {
 
     public void setPartialYearRates(Collection<PartialYearRate> partialYearRates) {
         this.partialYearRates = partialYearRates;
-    }
-
-    public Timestamp getCutoffDate() {
-        return cutoffDate;
-    }
-
-    public void setCutoffDate(Timestamp cutoffDate) {
-        this.cutoffDate = cutoffDate;
     }
 
     public TimeoffPolicy getTimeoffPolicy() {
@@ -165,6 +168,21 @@ public class TimeoffSetting {
         this.lastModifiedTime = lastModifiedTime;
     }
     
+	public Integer getCutoffMonth() {
+		return cutoffMonth;
+	}
+
+	public void setCutoffMonth(Integer cutoffMonth) {
+		this.cutoffMonth = cutoffMonth;
+	}
+
+	public Integer getCutoffDay() {
+		return cutoffDay;
+	}
+
+	public void setCutoffDay(Integer cutoffDay) {
+		this.cutoffDay = cutoffDay;
+	}
     public boolean isActive() throws NoValueSetError{
     	Boolean isActive = null;
     	if (timeoffPolicy != null) {
@@ -402,4 +420,5 @@ public class TimeoffSetting {
         }
         return partialMonthRates;
 	}
+
 }

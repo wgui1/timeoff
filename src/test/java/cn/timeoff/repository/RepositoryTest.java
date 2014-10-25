@@ -143,7 +143,10 @@ public class RepositoryTest {
     
     @Test
     public void partialYearRateTest() {
-        PartialYearRate partialYearRate = new PartialYearRate(true);
+        TimeoffSetting timeoffSetting = new TimeoffSetting(organizationTop);
+        timeoffSetting = timeoffSettingRepository.save(timeoffSetting);
+
+        PartialYearRate partialYearRate = new PartialYearRate(timeoffSetting, true);
         partialYearRate = partialYearRateRepository.save(partialYearRate);
         
         Iterable<PartialYearRate> partialYearRates = partialYearRateRepository.findAll();
@@ -243,6 +246,7 @@ public class RepositoryTest {
     	
     	entityManager.refresh(organizationTop);
     	entityManager.refresh(organizationUnix);
+    	entityManager.flush();
     	
         org.junit.Assert.assertNull(organizationUnix.getTimeoffSetting());
         org.junit.Assert.assertEquals(organizationUnix.getTimeoffSettingRecursive().getId(),
@@ -276,6 +280,10 @@ public class RepositoryTest {
     	allowancePolicy = allowancePolicyRepository.save(allowancePolicy);
     	timeoffSetting.setAllowancePolicy(allowancePolicy);
     	
+        PartialYearRate partialYearRate = new PartialYearRate(timeoffSetting, true);
+        partialYearRate = partialYearRateRepository.save(partialYearRate);
+        timeoffSetting.setPartialYearRate(partialYearRate);
+
     	timeoffSetting = timeoffSettingRepository.save(timeoffSetting);
 
         TimeoffSetting timeoffSettingUnix = new TimeoffSetting(organizationUnix);
@@ -286,17 +294,33 @@ public class RepositoryTest {
     	timeoffPolicy = timeoffPolicyRepository.save(timeoffPolicyUnix);
     	timeoffSettingUnix.setTimeoffPolicy(timeoffPolicyUnix);
 
-//    	AllowancePolicy allowancePolicyUnix = new AllowancePolicy(timeoffSettingUnix,
-//    														  1, 1, 10);
-//    	allowancePolicyUnix = allowancePolicyRepository.save(allowancePolicyUnix);
-//    	timeoffSetting.setAllowancePolicy(allowancePolicyUnix);
+        TimeoffSetting timeoffSettingIt = new TimeoffSetting(organizationIt);
+        timeoffSettingIt = timeoffSettingRepository.save(timeoffSettingIt);
+    	AllowancePolicy allowancePolicyIt = new AllowancePolicy(timeoffSettingIt,
+    														    3, 3, 30);
+    	allowancePolicyIt = allowancePolicyRepository.save(allowancePolicyIt);
+    	timeoffSettingIt.setAllowancePolicy(allowancePolicyIt);
+    	timeoffSettingIt = timeoffSettingRepository.save(timeoffSettingIt);
     	
-    	timeoffSettingUnix = timeoffSettingRepository.save(timeoffSettingUnix);
-    	
+    	entityManager.flush();
     	entityManager.refresh(organizationTop);
     	entityManager.refresh(organizationUnix);
+    	entityManager.refresh(organizationIt);
+    	entityManager.refresh(timeoffSetting);
+    	entityManager.refresh(timeoffSettingIt);
+    	entityManager.refresh(timeoffSettingUnix);
 
     	timeoffSettingUnix = organizationUnix.getTimeoffSetting();
-        org.junit.Assert.assertNotEquals(timeoffSettingUnix.getId(), timeoffSetting.getId());
+        org.junit.Assert.assertEquals(timeoffSettingUnix.getId(), timeoffSettingUnix.getId());
+        org.junit.Assert.assertEquals(timeoffSettingUnix.getAccuralBy(), 2);
+        org.junit.Assert.assertEquals(timeoffSettingUnix.getAccuralInterval(), 2);
+        org.junit.Assert.assertEquals(timeoffSettingUnix.getAccuralLimit(), 20);
+        org.junit.Assert.assertEquals(timeoffSettingUnix.getCarryOver(), 2);
+        org.junit.Assert.assertEquals(timeoffSettingUnix.getCutoffMonth().intValue(), 1);
+        org.junit.Assert.assertEquals(timeoffSettingUnix.getCutoffDay().intValue(), 1);
+        org.junit.Assert.assertEquals(timeoffSettingUnix.getRenewal(), 2);
+        org.junit.Assert.assertEquals(timeoffSettingUnix.getAllowanceAccrual(), 3);
+        org.junit.Assert.assertEquals(timeoffSettingUnix.getAllowanceAccrualCycle(), 3);
+        org.junit.Assert.assertEquals(timeoffSettingUnix.getAllowanceMax(), 30);
     }
 }

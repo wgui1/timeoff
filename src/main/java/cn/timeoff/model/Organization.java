@@ -34,8 +34,8 @@ public class Organization {
     
     @OneToMany(mappedBy="upperLevel")
     private Collection<Organization> subOrganizations = new ArrayList<Organization>();
-    
-    @OneToOne(mappedBy="organization")
+
+    @OneToOne(mappedBy="organization", optional=false)
     private TimeoffSetting timeoffSetting;
 
     private String name;
