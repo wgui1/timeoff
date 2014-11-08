@@ -26,7 +26,7 @@
     <![endif]-->
   </head>
   <body>
-    <div th:replace="fragments/header :: header">
+    <div layout:replace="fragments/header :: header">
     </div>
     <div class="container">
       <div layout:fragment="content">
@@ -36,6 +36,6 @@
         </p>
       </div>
     </div>
-    <div th:replace="fragments/footer :: footer">@ 2014 The Static Templates</div>
+    <div layout:replace="fragments/footer :: footer">@ 2014 The Static Templates</div>
   </body>
 </html>
