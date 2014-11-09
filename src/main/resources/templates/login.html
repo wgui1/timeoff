@@ -2,36 +2,19 @@
       xmlns:th="http://www.thymeleaf.org"
       layout:decorator="layout">
   <head>
-    <title>Timeoff User Login</title>
-
+    <title>User Login</title>
     <!-- Custom styles for this template -->
-    <!-- link href="signin.css" rel="stylesheet" -->
+    <link href="/assets/css/signin.css" rel="stylesheet"/>
   </head>
   <body>
     <div class="container" layout:fragment="content">
-    <form class="form-signin" action="/login.html" method="post" th:attr="action=@{/login}">
-        <!--p th:text="${error}" th:if="${error != null}">        
-                Invalid username and password.
-        </p>
-        <p th:text="${logout}" th:if="${logout != null}">       
-                You have been logged out.
-        </p-->
+    <form class="form-signin" role="form" action="/login.html" method="post" th:attr="action=@{/login}">
         <h2 class="form-signin-heading">Please sign in</h2>
-        <p>
-            <label for="Cooperation">Cooperation</label>
-            <input type="text" id="cooperation" name="cooperation"/>	
-        </p>
-        <p>
-            <label for="username">Username</label>
-            <input type="text" class="form-control" id="username" name="username"/>	
-        </p>
-        <p>
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" name="password"/>	
-        </p>
-        <input type="hidden"                        
-            name="csrfName" th:name="${_csrf.parameterName}"
-            value="csrfToken" th:value="${_csrf.token}"/>
+        <input type="text" class="form-control" placeholder="Cooperation" id="cooperation" name="cooperation"/>	
+        <input type="text" class="form-control" placeholder="Username" id="username" name="username"/>	
+        <input type="password" class="form-control" placeholder="Password" id="password" name="password"/>	
+        <input type="hidden" name="csrfName" th:name="${_csrf.parameterName}"
+               value="csrfToken" th:value="${_csrf.token}"/>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
     </form>
     </div>
