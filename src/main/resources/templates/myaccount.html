@@ -7,12 +7,14 @@
   </head>
   <body>
     <div layout:fragment="content">
-    <ol>
-        <li th:text="|${user.domainName}|">name</li>
-        <li th:text="|${user.username}|">name</li>
-        <li th:text="|${user.email}|">email</li>
-        <li th:text="|${user.password}|">email</li>
-    </ol>
+      <div class="container">
+      <ol>
+          <li th:text="|${user.domainName}|">name</li>
+          <li th:text="|${user.username}|">name</li>
+          <li th:text="|${user.email}|">email</li>
+          <li th:text="|${user.password}|">email</li>
+      </ol>
+      </div>
     </div>
   </body>
 </html>
