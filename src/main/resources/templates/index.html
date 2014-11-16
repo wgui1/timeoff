@@ -1,15 +1,13 @@
-<!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org"
       layout:decorator="fragments/layout">
   <head>
-    <title>Employee Information</title>
+    <title>User Login</title>
+    <!-- Custom styles for this template -->
+    <link href="/assets/css/signin.css" rel="stylesheet"/>
   </head>
   <body>
-    <div layout:fragment="content">
-    <ol>
-        <li th:text="|${user.firstName} ${user.lastName}|">name</li>
-    </ol>
+    <div class="container" layout:fragment="content">
     </div>
   </body>
 </html>

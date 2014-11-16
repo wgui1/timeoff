@@ -1,38 +1,20 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org"
-      layout:decorator="layout">
+      layout:decorator="fragments/layout">
   <head>
     <title>Employee Information</title>
+    <link href="/assets/css/signin.css" rel="stylesheet"/>
   </head>
   <body>
     <div layout:fragment="content">
-    <form action="/register.html" method="post" th:attr="action=@{/register}">
-        <p th:text="${error}" th:if="${error != null}">        
-                User name has already been used.
-        </p>
-        <p th:text="${logout}" th:if="${logout != null}">       
-                You have been logged out.
-        </p>
-        <p>
-            <label for="Cooperation">Cooperation</label>
-            <input type="text" id="cooperation" name="cooperation"/>	
-        </p>
-        <p>
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username"/>	
-        </p>
-        <p>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password"/>	
-        </p>
-        <p>
-            <label for="email">Email</label>
-            <input type="text" id="email" name="email"/>	
-        </p>
-        <input type="hidden"
-            name="csrfName" th:name="${_csrf.parameterName}"
-            value="csrfToken" th:value="${_csrf.token}"/>
-        <button type="submit" class="btn">Submit</button>
+    <form class="form-signin" role="form" action="/register.html" method="post" th:attr="action=@{/register}">
+        <h2 class="form-signin-heading" th:text="#{login.pleaseRegister}">Please sign in</h2>
+        <input type="text" class="form-control" th:placeholder="#{login.cooperation}" id="cooperation" name="cooperation"/>	
+        <input type="text" class="form-control" th:placeholder="#{login.username}" id="username" name="username"/>	
+        <input type="password" class="form-control" th:placeholder="#{login.password}" id="password" name="password"/>	
+        <input type="hidden" name="csrfName" th:name="${_csrf.parameterName}"
+               value="csrfToken" th:value="${_csrf.token}"/>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{login.signIn}">Sign in</button>
     </form>
     </div>
   </body>

@@ -50,7 +50,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .formLogin()
                 .loginPage("/login")
                 .permitAll()
-                .domainParameter("cooperation");
+                .domainParameter("cooperation")
+                .and()
+            .rememberMe();
+        
     }
 
 	private static class SecurityPostProcessor implements ObjectPostProcessor<SecurityExpressionHandler<FilterInvocation>> {
