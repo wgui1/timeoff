@@ -52,7 +52,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .domainParameter("cooperation")
                 .and()
-            .rememberMe();
+            .rememberMe()
+            	.and()
+            .logout()
+            	.logoutSuccessUrl("/");
+
         
     }
 
