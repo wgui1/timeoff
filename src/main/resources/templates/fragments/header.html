@@ -22,8 +22,8 @@
             <li><a href="/login" th:text="#{menu.login}">Login</a></li>
             <li><a href="/register" th:text="#{menu.register}">Register</a></li>
             <li><form class="navbar-form" action="/logout" method="post">
-                	<button class="btn btn-default" type="submit" th:text="#{menu.logout}">Logout</button>
                     <input type="hidden" name="csrfName" th:name="${_csrf.parameterName}" value="csrfToken" th:value="${_csrf.token}"/>
+                	<button class="btn btn-default" type="submit" th:text="#{menu.logout}">Logout</button>
             </form></li>
 		</ul>
         </div><!--/.navbar-collapse -->
