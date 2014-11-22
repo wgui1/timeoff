@@ -1,7 +1,7 @@
 package cn.timeoff.security.service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -217,13 +217,13 @@ public class DomainUserDetailsManagerImpl extends DomainUserDetailsServiceImpl
 
     @Override
     public void createGroup(String doName, String groupname,
-                            List<GrantedAuthority> authorities) {
+                            List<? extends GrantedAuthority> authorities) {
         Domain domain = findDomain(doName);
         Group group = new Group(domain, groupname);
         Group group1 = groupRepository.save(group);
-        authorities.stream().map(p -> groupAuthorityRepository.save(
-                        new GroupAuthority(group1, p.getAuthority())))
-                        .toArray();
+        for(GrantedAuthority a: authorities) {
+        	groupAuthorityRepository.save(new GroupAuthority(group1, a.getAuthority()));
+        }
     }
 
     @Override
@@ -257,10 +257,11 @@ public class DomainUserDetailsManagerImpl extends DomainUserDetailsServiceImpl
     @Override
     public List<GrantedAuthority> findGroupAuthorities(String doName,
                                                        String groupname) {
-        return groupAuthorityRepository.findAuthoritiesByDomainNameAndGroupname(
-                doName, groupname).stream()
-                                  .map(p -> new SimpleGrantedAuthority(p))
-                                  .collect(Collectors.toList());
+        ArrayList<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
+        for(String n: groupAuthorityRepository.findAuthoritiesByDomainNameAndGroupname(doName, groupname)) {
+        	grantedAuthorities.add(new SimpleGrantedAuthority(n));
+        }
+        return grantedAuthorities;
     }
 
     @Override

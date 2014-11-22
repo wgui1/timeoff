@@ -1,9 +1,11 @@
 package cn.timeoff.security.core;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.TreeSet;
 
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
@@ -96,13 +98,20 @@ public class DomainUserDetailsImpl implements DomainUserDetails,
 
     private static List<GrantedAuthority> sortAuthorities(Collection<? extends GrantedAuthority> authorities) {
         Assert.notNull(authorities, "Cannot pass a null GrantedAuthority collection");
-        if (authorities.stream().anyMatch(g -> g.getAuthority() == null)) {
+        for(GrantedAuthority a: authorities) {
+        	if(a.getAuthority() == null) {
                 throw new IllegalArgumentException("GrantedAuthority list cannot contain any null elements");
+        	}
         }
-        List<GrantedAuthority> asList = authorities.stream().distinct()
-                           .sorted( (g1, g2) -> g1.getAuthority().compareTo(g2.getAuthority()) )
-                           .collect(Collectors.toList());
-        return asList;
+        TreeSet<GrantedAuthority> authoritySet = new TreeSet<GrantedAuthority>(new Comparator<GrantedAuthority>() {
+        						public int compare(GrantedAuthority o1, GrantedAuthority o2) {
+        							return o1.getAuthority().compareTo(o2.getAuthority());
+        						}
+        });
+        authoritySet.addAll(authorities);
+        ArrayList<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
+        grantedAuthorities.addAll(authoritySet);
+        return grantedAuthorities;
     }
 
     @Override

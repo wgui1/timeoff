@@ -15,7 +15,7 @@ public interface DomainUserDetailsManager extends UserDetailsManager{
 
     void deleteDomain(String domainName);
 
-    void createGroup(String doName, String groupName, List<GrantedAuthority> authorities);
+    void createGroup(String doName, String groupName, List<? extends GrantedAuthority> authorities);
 
     void deleteGroup(String doName, String groupName);
 

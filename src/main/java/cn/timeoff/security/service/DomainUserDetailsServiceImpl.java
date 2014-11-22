@@ -3,7 +3,6 @@ package cn.timeoff.security.service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -114,16 +113,20 @@ public class DomainUserDetailsServiceImpl implements DomainUserDetailsService {
 
     protected Collection<? extends GrantedAuthority> loadUserAuthorities(User user) {
         List<Authority> authorities = authorityRepository.findAllByUser(user);
-        return authorities.stream()
-                  .map(p -> new SimpleGrantedAuthority(rolePrefix + p.getAuthority()))
-                  .collect(Collectors.toList());
+        ArrayList<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<SimpleGrantedAuthority>();
+        for(Authority p: authorities) {
+        	grantedAuthorities.add(new SimpleGrantedAuthority(rolePrefix + p.getAuthority()));
+        }
+        return grantedAuthorities;
     }
 
     protected Collection<? extends GrantedAuthority> loadGroupAuthorities(User user) {
         List<GroupAuthority> authorities = groupAuthorityRepository.findByUser(user);
-        return authorities.stream()
-                  .map(p -> new SimpleGrantedAuthority(rolePrefix + p.getAuthority()))
-                  .collect(Collectors.toList());
+        ArrayList<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
+        for(GroupAuthority p: authorities) {
+        	grantedAuthorities.add(new SimpleGrantedAuthority(rolePrefix + p.getAuthority()));
+        }
+        return grantedAuthorities;
     }
 
     public String getRolePrefix() {
