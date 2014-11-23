@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -12,8 +13,8 @@
     <title layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE">Timeoff Management System</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="/assets/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="/assets/css/bootstrap-theme.min.css" rel="stylesheet"/>
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}"/>
+    <link href="/assets/css/bootstrap-theme.min.css" rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}"/>
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="/assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
