@@ -25,6 +25,7 @@ public class AllowancePolicy {
 
     private Integer accrual;
     private Integer accrualCycle;
+    private Integer accrualType;
     private Integer max;
 
     @CreatedBy
@@ -76,6 +77,14 @@ public class AllowancePolicy {
 
 	public void setAccrualCycle(Integer accrualCycle) {
 		this.accrualCycle = accrualCycle;
+	}
+
+	public Integer getAccrualType() {
+		return accrualType;
+	}
+
+	public void setAccrualType(Integer accrualType) {
+		this.accrualType = accrualType;
 	}
 
 }
